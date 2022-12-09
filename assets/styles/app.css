@@ -133,9 +133,6 @@ body {
 }
 
 @media only screen and (max-width: 856px) {
-    div.right-group {
-        display: none;
-    }
 
     .img-cycloop {
         max-width: 120px;
@@ -143,84 +140,11 @@ body {
 
     .header-menu {
         height: 75px;
-        background-color: #030b1b;
-        border-bottom: 1px solid #dee2e61c;
+        background-color: #FFFFFF;
+        border-bottom: 1px solid #3d3e3fbf;
         width: 100%;
         display: flex;
         align-items: center;
         justify-content: space-around;
-    }
-
-    .menu-mobile {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-    }
-
-    .button-search {
-        display: flex;
-        background-color: #030b1b;
-        border: 0;
-    }
-
-    .fa.fa-search {
-        color: #FFFFFF;
-    }
-
-    .checkbox {
-        position: absolute;
-        display: block;
-        height: 32px;
-        width: 32px;
-        opacity: 0;
-        cursor: pointer;
-        z-index: 1;
-        margin: 0;
-    }
-
-    .hamburger-lines {
-        display: block;
-        height: 26px;
-        width: 32px;
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .hamburger-lines .line {
-        display: block;
-        height: 4px;
-        width: 100%;
-        border-radius: 10px;
-        background: #FFFFFF;
-    }
-
-    .hamburger-lines .line1 {
-        transform-origin: 0% 0%;
-        transition: transform 0.4s ease-in-out;
-    }
-
-    .hamburger-lines .line2 {
-        transition: transform 0.2s ease-in-out;
-    }
-
-    .hamburger-lines .line3 {
-        transform-origin: 0% 100%;
-        transition: transform 0.4s ease-in-out;
-    }
-
-    .menu-mobile input[type="checkbox"]:checked ~ .hamburger-lines .line1 {
-        transform: rotate(45deg);
-    }
-
-    .menu-mobile input[type="checkbox"]:checked ~ .hamburger-lines .line2 {
-        transform: scaleY(0);
-    }
-
-    .menu-mobile input[type="checkbox"]:checked ~ .hamburger-lines .line3 {
-        transform: rotate(-45deg);
     }
   }
