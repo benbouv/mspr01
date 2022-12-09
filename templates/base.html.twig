@@ -14,26 +14,7 @@
         {% endblock %}
     </head>
     <body>
-        <nav class="header-menu">
-            <a id="logo-cycloop1" class="logo-cycloop" href="{{ path('app_home') }}" style="text-decoration:none">
-            <img class="img-cycloop" src="{{ asset('build/img/logo-cycloop.png') }}">
-            </a>
-            <div class="right-group">
-                {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <a class="label" href="{{ path('app_login') }}" style="text-decoration:none">
-                        Connexion
-                    </a>
-                    <a class="label" href="{{ path('app_register') }}" style="text-decoration:none">
-                        Inscription
-                    </a>
-                {% endif %}
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <button type="button" class="p-button-rounded" style="cursor: pointer;">
-                        <span class="p-button-label">mon compte</span>
-                    </button>
-                {% endif %}
-            </div>
-        </nav>
+        {% include 'navbar/index.html.twig' %}
         {% block body %}{% endblock %}
     </body>
 </html>
