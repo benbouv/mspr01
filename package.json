@@ -20,6 +20,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "file-loader": "^6.2.0",
         "yarn": "^1.22.19"
     }
 }
