@@ -2,17 +2,39 @@
 
 namespace App\Controller;
 
+use App\Entity\Plante;
+use App\Repository\PlanteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MesPlantesController extends AbstractController
 {
+
+    private $repository;
+
+    public function __construct(PlanteRepository $planteRepository)
+    {
+        $this->repository = $planteRepository;
+    }
+
+
+
+
     #[Route('/mesplantes', name: 'app_mesplantes')]
+
     public function index(): Response
     {
+        $plantes = $this->repository->findAll();
+        // $plante = new Plante;
+        // $plante->setNom("rose");
+        // $this->repository->save($plante,false);
+        dump($plantes);
+        // $this->repository->remove($plante,true);
+        
         return $this->render('MesPlantes/MesPlantes.html.twig', [
-            'controller_name' => 'MesPlantesController'
+            'controller_name' => 'MesPlantesController',
+            'mesplantes' => $plantes
         ]);
     }
 }
