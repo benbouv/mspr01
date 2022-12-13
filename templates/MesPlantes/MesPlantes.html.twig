@@ -7,8 +7,8 @@
     <h1>Vos dernières plantes</h1>
     <div class="row flex">
         {% for plante in mesplantes %}
-            <div class="col-2">
-                <div class="card" style="width: 18rem;">
+            <div class="col-3">
+                <div class="card" style="width: auto;">
                     <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{ plante.Nom }}</h5>
