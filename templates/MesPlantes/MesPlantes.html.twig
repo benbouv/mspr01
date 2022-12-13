@@ -2,34 +2,115 @@
 
 {% block title %}Mes Plantes{% endblock %}
 
+{% block head %}
+    <style>
+      body {
+        font-family: 'Veranda', sans-serif;
+      }
+      span {
+        font-size: 22px;
+        cursor: pointer
+      }
+      .overlay {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #001536;
+        overflow-x: hidden;
+        transition: 0.5s;
+      }
+      .overlay-content {
+        position: relative;
+        top: 30%;
+        width: 100%;
+        text-align: center;
+        margin-top: 30px;
+      }
+      .overlay a {
+        padding: 10px;
+        text-decoration: none;
+        font-size: 32px;
+        color: #7792a3;
+        display: block;
+        transition: 0.4s;
+      }
+      .overlay a:hover,
+      .overlay a:focus {
+        color: #eeeeee;
+      }
+      .overlay .close {
+        position: absolute;
+        top: 10px;
+        right: 35px;
+        font-size: 50px;
+      }
+      @media screen and (max-height: 450px) {
+        .overlay a {
+          font-size: 20px
+        }
+        .overlay .closed {
+          font-size: 40px;
+          top: 15px;
+          right: 35px;
+        }
+      }
+    </style>
+{% endblock %}
+
+
 {% block body %}
-<div class="container">
-    <h1>Vos dernières plantes</h1>
-    <div class="row flex">
-        <div class="col-3" style="height: 15em; width: 9em">
-            <div class="card" style="height: 12em;">
-                <a href="#" style="text-align: center;">
-                    <img src="{{ asset('build/img/icon-add.png') }}" alt="..." style="width: 75%; 
-                        height=50%;
-                        padding: 1em;
-                        margin-top: 2.5em;"
-                    >
-                </a>
-            </div>
-        </div>
-        {% for plante in mesplantes %}
+    <div id="navoverlay" class="overlay">
+      <a href="javascript:void(0)" class="closed" onclick="closeNav()">&times;</a>
+      <div class="overlay-content">
+        <a href="#">Books</a>
+        <a href="#">Quizzes</a>
+        <a href="#">Snippets</a>
+        <a href="#">Tools</a>
+      </div>
+    </div>
+    <span onclick="openNav()">&#9776; Click Here</span>
+
+
+    <div class="container">
+        <h1>Vos dernières plantes</h1>
+        <div class="row flex">
             <div class="col-3" style="height: 15em; width: 9em">
                 <div class="card" style="height: 12em;">
-                    <a href="#" style="color: black;
-                        text-decoration: none;">
-                        <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h4 class="card-title" style="text-align: center;">{{ plante.Nom }}</h4>
-                        </div>
+                    <a href="#" style="text-align: center;">
+                        <img src="{{ asset('build/img/icon-add.png') }}" alt="..." style="width: 75%; 
+                            height=50%;
+                            padding: 1em;
+                            margin-top: 2.5em;"
+                        >
                     </a>
                 </div>
             </div>
-        {% endfor %}
+            {% for plante in mesplantes %}
+                <div class="col-3" style="height: 15em; width: 9em">
+                    <div class="card" style="height: 12em;">
+                        <a href="#" style="color: black;
+                            text-decoration: none;">
+                            <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center;">{{ plante.Nom }}</h4>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
-</div>
+    <script>
+        function openNav() {
+            el=document.getElementById("navoverlay");
+            el.style.width = "30%";
+        }
+        function closeNav() {
+            el=document.getElementById("navoverlay");
+            el.style.width = "0%";
+        }
+    </script>
 {% endblock %}
