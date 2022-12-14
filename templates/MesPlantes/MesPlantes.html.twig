@@ -18,17 +18,25 @@
         z-index: 1;
         margin-top: 2%;
         margin-bottom: 5%;
-        margin-left: 25%;
-        background-color: rgba(0, 0, 0, 0.55);
+        margin-left: 20%;
+        background-color: rgba(0, 0, 0, 0.75);
         overflow-x: hidden;
         transition: 0.5s;
       }
       .overlay-content {
         position: relative;
-        top: 15%;
+        top: 10%;
         width: 100%;
         text-align: center;
         margin-top: 30px;
+      }
+      .overlay .formulaire {
+        padding: 10px;
+        text-decoration: none;
+        font-size: 32px;
+        color: #b9c7cf;
+        display: block;
+        transition: 0.4s;
       }
       .overlay a {
         padding: 10px;
@@ -64,12 +72,48 @@
 
 {% block body %}
     <div id="navoverlay" class="overlay">
-      <a href="javascript:void(0)" class="closed" onclick="closeNav()" style="position: absolute; left: 270px";>&times;</a>
+      <a href="javascript:void(0)" class="closed" onclick="closeNav()" style="position: absolute; left: 260px">&times;</a>
       <div class="overlay-content">
-        <a href="#">Books</a>
-        <a href="#">Quizzes</a>
-        <a href="#">Snippets</a>
-        <a href="#">Tools</a>
+        <div class="formulaire">
+          <form action="#" method="post">
+            <div class="mb-3">
+              <h2>Nouvelle plante</h2>
+              <br/>
+              <p>***</p>
+              <br/>
+
+              <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Nommez la plante">
+              <br/>
+
+              <select class="form-select" aria-label="Type de plante">
+                <option selected>Sélectionnez le type de plante</option>
+                <option value="1">Je ne connais pas.</option>
+                <option value="2">Plante à fleur</option>
+                <option value="3">Cactus</option>
+                <option value="4">Herbacées</option>
+                <option value="5">Arbres</option>
+                <option value="6">Algues</option>
+                <option value="7">Autre?</option>
+              </select>
+              <br/>
+
+              <label for="formFileSm" class="form-label">Photo de la plante</label>
+              <input class="form-control form-control-sm" id="formFileSm" type="file">
+              <br/>
+              <p>***</p>
+
+              <label for="exampleFormControlTextarea1" class="form-label">Information sur la plante</label>
+              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Periode d'arossage, conditionnment..."></textarea>
+            <br/>
+              <p>***</p>
+              <div class="col-12">
+                <button class="btn btn-primary" type="submit" style="background-color: rgb(95, 95, 95);">Valider</button>
+              </div>
+              <br/>
+              <p>***</p>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
 
