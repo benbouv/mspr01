@@ -22,7 +22,6 @@ class MesPlantesController extends AbstractController
 
 
     #[Route('/mesplantes', name: 'app_mesplantes')]
-
     public function index(): Response
     {
         $plantes = $this->repository->findAll();
@@ -36,5 +35,18 @@ class MesPlantesController extends AbstractController
             'controller_name' => 'MesPlantesController',
             'mesplantes' => $plantes
         ]);
+    }
+
+    #[Route('/mesplantes/form', name: 'app_mesplantesform')]
+    public function formaddplante()
+    {
+        $plante = new Plante;
+        $plante->setNom($_POST['nom']);
+        $plante->setFamille($_POST['type']);
+        $plante->setPeriodeArrosage($_POST['description']);
+        $this->repository->save($plante,true);
+        
+        return $this->index();
+    
     }
 }
