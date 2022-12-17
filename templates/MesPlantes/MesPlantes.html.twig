@@ -72,7 +72,7 @@
 
 {% block body %}
     <div id="navoverlay" class="overlay">
-      <a href="javascript:void(0)" class="closed" onclick="closeNav()" style="position: absolute; left: 260px">&times;</a>
+      <a href="javascript:void(0)" class="closed" onclick="closeNav('navoverlay')" style="position: absolute; left: 260px">&times;</a>
       <div class="overlay-content">
         <div class="formulaire">
           <form action="/mesplantes/form" method="post">
@@ -117,6 +117,13 @@
       </div>
     </div>
 
+    <div id="DivContextuelCarte" class="overlay">
+        <a href="javascript:void(0)" class="closed" onclick="closeNav('DivContextuelCarte')" style="position: absolute; left: 260px">&times;</a>
+
+    </div>
+
+
+
 
     <div class="container">
         <h1>Vos dernières plantes</h1>
@@ -135,7 +142,7 @@
             
             {% for plante in mesplantes %}
                 <div class="col-3" style="height: 15em; width: 9em">
-                    <a href="#" style="text-decoration: none;">
+                    <a href="#" oncontextmenu="ClicDroitCarte()" style="text-decoration: none;">
                         <div class="card" id="overfly{{ loop.index }}" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style="height: 12em; 
                             color: black;
                             border-color:;
@@ -150,15 +157,20 @@
             {% endfor %}
         </div>
     </div>
+
+
     <script>
+        //overlays add plante
         function openNav() {
             el=document.getElementById("navoverlay");
             el.style.width = "20em";
         }
-        function closeNav() {
-            el=document.getElementById("navoverlay");
+        function closeNav($idnav) {
+            el=document.getElementById($idnav);
             el.style.width = "0em";
         }
+
+        //effets des cartes
         function overclickbrigth($byId) {
             el=document.getElementById($byId);
             el.style.borderColor = "hsla(60, 100%, 50%, 0.3)";
@@ -174,5 +186,14 @@
             el.style.borderColor = "rgba(0, 0, 0, 0.2)";
             el.style.borderWidth = "1px";
         }
+
+        //clique droit sur cartes
+        function ClicDroitCarte() {
+            el=document.getElementById("DivContextuelCarte");
+            el.style.width = "20em";
+
+        }
+
+
     </script>
 {% endblock %}

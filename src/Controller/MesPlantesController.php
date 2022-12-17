@@ -46,7 +46,7 @@ class MesPlantesController extends AbstractController
         $plante->setPeriodeArrosage($_POST['description']);
         $this->repository->save($plante,true);
         
-        return $this->index();
+        return $this->redirect("/mesplantes");
     
     }
 }
