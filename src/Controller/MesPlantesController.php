@@ -28,7 +28,7 @@ class MesPlantesController extends AbstractController
         // $plante = new Plante;
         // $plante->setNom("rose");
         // $this->repository->save($plante,false);
-        dump($plantes);
+        //dump($plantes);
         // $this->repository->remove($plante,true);
         
         return $this->render('MesPlantes/MesPlantes.html.twig', [
@@ -45,6 +45,19 @@ class MesPlantesController extends AbstractController
         $plante->setFamille($_POST['type']);
         $plante->setPeriodeArrosage($_POST['description']);
         $this->repository->save($plante,true);
+        
+        return $this->redirect("/mesplantes");
+    
+    }
+
+    #[Route('/mesplantes/suppr_plante', name: 'app_mesplantessuppr')]
+    public function supprimeplante()
+    {
+        $plantes = $this->repository->findById($_POST['idplanteinput']);
+        dump($_POST['idplanteinput']);
+        $plante = $plantes[0];
+        
+        $this->repository->remove($plante,true);
         
         return $this->redirect("/mesplantes");
     

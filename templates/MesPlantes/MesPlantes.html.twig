@@ -87,13 +87,13 @@
 
               <select class="form-select" name="type" aria-label="Type de plante">
                 <option selected>Sélectionnez le type de plante</option>
-                <option value="1">Je ne connais pas.</option>
-                <option value="2">Plante à fleur</option>
-                <option value="3">Cactus</option>
-                <option value="4">Herbacées</option>
-                <option value="5">Arbres</option>
-                <option value="6">Algues</option>
-                <option value="7">Autre?</option>
+                <option value="inconnu">Je ne connais pas.</option>
+                <option value="Plante à fleur">Plante à fleur</option>
+                <option value="Cactus">Cactus</option>
+                <option value="Herbacées">Herbacées</option>
+                <option value="Arbres">Arbres</option>
+                <option value="Algues">Algues</option>
+                <option value="Autre">Autre?</option>
               </select>
               <br/>
 
@@ -119,7 +119,12 @@
 
     <div id="DivContextuelCarte" class="overlay">
         <a href="javascript:void(0)" class="closed" onclick="closeNav('DivContextuelCarte')" style="position: absolute; left: 260px">&times;</a>
-
+        <form action="/mesplantes/suppr_plante" method="post">
+          <div class="col-12">
+            <input type="hidden" id="idplanteinput" name="idplanteinput" value="marche pas">
+            <button class="btn btn-primary" onclick="GetSupprPlanteId()" type="submit">Supprimer</button>
+          </div>
+        </form>
     </div>
 
 
@@ -142,14 +147,14 @@
             
             {% for plante in mesplantes %}
                 <div class="col-3" style="height: 15em; width: 9em">
-                    <a href="#" oncontextmenu="ClicDroitCarte()" style="text-decoration: none;">
-                        <div class="card" id="overfly{{ loop.index }}" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style="height: 12em; 
+                    <a href="#" data-idplante="{{ plante.Id }}" oncontextmenu="ClicDroitCarte(this)" style="text-decoration: none;">
+                        <div class="card" id="overfly{{ plante.Id }}" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style="height: 12em; 
                             color: black;
                             border-color:;
                             ">
                             <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center;">{{ plante.Nom }}</h4>
+                                <h4 class="card-title" style="text-align: center;">{{ plante.Nom }} {{ plante.Id }}</h4>
                             </div>
                         </div>
                     </a>
@@ -187,11 +192,17 @@
             el.style.borderWidth = "1px";
         }
 
+        
         //clique droit sur cartes
-        function ClicDroitCarte() {
+        function ClicDroitCarte(elementself) {
             el=document.getElementById("DivContextuelCarte");
             el.style.width = "20em";
-
+            el.dataset.idplante = elementself.dataset.idplante;
+        }
+        function GetSupprPlanteId(){
+            el=document.getElementById("DivContextuelCarte");
+            elinput=document.getElementById("idplanteinput");
+            elinput.value = el.dataset.idplante;
         }
 
 
