@@ -147,20 +147,27 @@
             
             {% for plante in mesplantes %}
                 <div class="col-3" style="height: 15em; width: 9em">
-                    <a href="#" data-idplante="{{ plante.Id }}" oncontextmenu="ClicDroitCarte(this)" style="text-decoration: none;">
+                    <a href="#" onclick="PlanteSelectForm(this)" data-idplante="{{ plante.Id }}" oncontextmenu="ClicDroitCarte(this)" style="text-decoration: none;">
                         <div class="card" id="overfly{{ plante.Id }}" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style="height: 12em; 
                             color: black;
                             border-color:;
                             ">
                             <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center;">{{ plante.Nom }} {{ plante.Id }}</h4>
+                                <h4 class="card-title" style="text-align: center;">{{ plante.Nom }} ({{ plante.Id }})</h4>
                             </div>
                         </div>
                     </a>
                 </div>
             {% endfor %}
         </div>
+    </div>
+
+    {# Formulaire caché #}
+    <div hidden>
+        <form action="/SuiviDeLaPlante" id="FormSelctPlante" method="post">
+          <input type="hidden" id="planteselectinput" name="planteselectinput" value="marche pas">
+        </form>
     </div>
 
 
@@ -192,7 +199,6 @@
             el.style.borderWidth = "1px";
         }
 
-        
         //clique droit sur cartes
         function ClicDroitCarte(elementself) {
             el=document.getElementById("DivContextuelCarte");
@@ -205,6 +211,12 @@
             elinput.value = el.dataset.idplante;
         }
 
+        //clique gauche sur cartes
+        function PlanteSelectForm(elementself) {
+            elinput=document.getElementById("planteselectinput");
+            elinput.value = elementself.dataset.idplante;
+            document.getElementById("FormSelctPlante").submit();
+        }
 
     </script>
 {% endblock %}

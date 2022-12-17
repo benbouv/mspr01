@@ -55,9 +55,11 @@ class MesPlantesController extends AbstractController
     {
         $plantes = $this->repository->findById($_POST['idplanteinput']);
         dump($_POST['idplanteinput']);
-        $plante = $plantes[0];
-        
-        $this->repository->remove($plante,true);
+
+        if (isset($plantes[0])){
+            $plante = $plantes[0];
+            $this->repository->remove($plante,true);
+        }
         
         return $this->redirect("/mesplantes");
     
