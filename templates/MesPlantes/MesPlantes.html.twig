@@ -118,7 +118,8 @@
     </div>
 
     <div id="DivContextuelCarte" class="overlay">
-        <a href="javascript:void(0)" class="closed" onclick="closeNav('DivContextuelCarte')" style="position: absolute; left: 260px">&times;</a>
+        <a href="javascript:void(0)" class="closed" onclick="closeNav('DivContextuelCarte')" style="position: relative;">&times;</a>
+        <br>
         <form action="/mesplantes/suppr_plante" method="post">
           <div class="col-12">
             <input type="hidden" id="idplanteinput" name="idplanteinput" value="marche pas">
@@ -132,6 +133,12 @@
 
     <div class="container">
         <h1>Vos dernières plantes</h1>
+        <small>- Click-droit et selectionnez "supprimer" pour effacer des plantes.</small>
+        </br>
+        <small>- Appuyer sur l'icon "+" pour ajouter une plante.</small>
+        </br>
+        </br>
+        
         <div class="row flex">
             <div class="col-3" style="height: 15em; width: 9em">
                 <span onclick="openNav()">
@@ -147,7 +154,7 @@
             
             {% for plante in mesplantes %}
                 <div class="col-3" style="height: 15em; width: 9em">
-                    <a href="#" onclick="PlanteSelectForm(this)" data-idplante="{{ plante.Id }}" oncontextmenu="ClicDroitCarte(this)" style="text-decoration: none;">
+                    <a href="{{ path('app_suiviplante', {id: plante.Id}) }}" data-idplante="{{ plante.Id }}" oncontextmenu="ClicDroitCarte(this)" style="text-decoration: none;">
                         <div class="card" id="overfly{{ plante.Id }}" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style="height: 12em; 
                             color: black;
                             ">
@@ -163,11 +170,11 @@
     </div>
 
     {# Formulaire caché #}
-    <div hidden>
+    {# <div hidden>
         <form action="/SuiviDeLaPlante" id="FormSelctPlante" method="post">
           <input type="hidden" id="planteselectinput" name="planteselectinput" value="marche pas">
         </form>
-    </div>
+    </div> #}
 
 
     <script>
@@ -199,9 +206,21 @@
         }
 
         //clique droit sur cartes
+
+        function getOffset(el) {
+          el = el.getBoundingClientRect();
+          return {
+            left: (el.left + window.scrollX -100 ) +'px',
+            top: (el.top + window.scrollY ) +'px'
+          }
+        }
         function ClicDroitCarte(elementself) {
             el=document.getElementById("DivContextuelCarte");
-            el.style.width = "20em";
+            el.style.width = "8em";
+            el.style.height = "10em";
+            el.style.position = "absolute";
+            el.style.top = getOffset(elementself).top;
+            el.style.left = getOffset(elementself).left;
             el.dataset.idplante = elementself.dataset.idplante;
         }
         function GetSupprPlanteId(){
@@ -211,11 +230,11 @@
         }
 
         //clique gauche sur cartes
-        function PlanteSelectForm(elementself) {
+        {# function PlanteSelectForm(elementself) {
             elinput=document.getElementById("planteselectinput");
             elinput.value = elementself.dataset.idplante;
             document.getElementById("FormSelctPlante").submit();
-        }
+        } #}
 
     </script>
 {% endblock %}

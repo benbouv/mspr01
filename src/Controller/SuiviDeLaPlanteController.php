@@ -21,12 +21,12 @@ class SuiviDeLaPlanteController extends AbstractController
 
 
 
-    #[Route('/SuiviDeLaPlante', name: 'app_suiviplante')]
-    public function index(): Response
+    #[Route('/SuiviDeLaPlante{id}', name: 'app_suiviplante')]
+    public function index(Plante $plante): Response
     {
-        $plantes = $this->repository->findById($_POST['planteselectinput']);
-        dump($_POST['planteselectinput']);
-        $plante = $plantes[0];
+        // $plantes = $this->repository->findById($plante->getId());
+        // dump($plante->getId());
+        // $plante = $plantes[0];
         
         return $this->render('MesPlantes/MaPlante.html.twig', [
             'controller_name' => 'SuiviDeLaPlanteController',
