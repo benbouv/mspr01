@@ -150,11 +150,10 @@
                     <a href="#" onclick="PlanteSelectForm(this)" data-idplante="{{ plante.Id }}" oncontextmenu="ClicDroitCarte(this)" style="text-decoration: none;">
                         <div class="card" id="overfly{{ plante.Id }}" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style="height: 12em; 
                             color: black;
-                            border-color:;
                             ">
                             <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center;">{{ plante.Nom }} ({{ plante.Id }})</h4>
+                                <h4 class="card-title" style="text-align: center;">{{ plante.Nom }}</h4>
                             </div>
                         </div>
                     </a>

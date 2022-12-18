@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes Plantes{% endblock %}
+{% block title %}Ma Plante{% endblock %}
 
 {% block head %}
     <style>
@@ -66,6 +66,62 @@
           right: 35px;
         }
       }
+      .card-body {
+          min-height: 80px;
+          min-width: 260px;
+          text-align: center;
+      }
+
+      .testimonial-group > .row {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      .testimonial-group > .row > .col-4 {
+        display: inline-block;
+      }
+      .testimonial-group > .row > .card {
+        display: inline-block;
+      }
+
+
+
+
+      .chat-log {
+        padding: 40px 0 114px;
+        height: auto;
+        overflow: auto;
+      }
+      .chat-log__item {
+        background: #fafafa;
+        padding: 10px;
+        margin: 0 auto 20px;
+        max-width: 80%;
+        float: left;
+        border-radius: 4px;
+        box-shadow: 0 1px 2px rgba(0,0,0,.1);
+        clear: both;
+      }
+
+      .chat-log__item.chat-log__item--own {
+        float: right;
+        background: #DCF8C6;
+        text-align: right;
+      }
+
+      .chat-form {
+        background: #DDDDDD;
+        padding: 40px 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+
+      .chat-log__author {
+        margin: 0 auto .5em;
+        font-size: 14px;
+        font-weight: bold;
+      }
     </style>
 {% endblock %}
 
@@ -74,8 +130,80 @@
 
 
 
+    <h1 class="display-6" style="text-align: center;">{{ planteselected.Nom }}</h1>
 
-    <p>{{ planteselected.Nom }}</p>
+    {# Carousel #}
+    <div id="carousell2">
+          <div class= "container testimonial-group">
+              <div class="row d-flex flex-row flex-nowrap">
+                  <div class="card card-body" style="width: 9em ">
+                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
+                      <div class="card-body">
+                          <small>18/12/2022 14:27</small>
+                      </div>
+                  </div>
+                  <div class="card card-body">
+                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top"  alt="...">
+                  </div>
+                  <div class="card card-body">
+                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
+                  </div>
+                  <div class="card card-body">
+                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
+                  </div>
+                  <div class="card card-body">
+                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
+                  </div>
+                  <div class="card card-body">
+                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
+                  </div>
+                  <div class="card card-body">
+                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
+                  </div>
+                  <div class="card card-body">
+                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
+                  </div>
+              </div>
+          </div>
+    </div>
+
+
+
+
+    {# Chat #}
+    <div class="main">
+      <div class="container text-center col-8 ">
+        <div class="chat-log">
+          <div class="chat-log__item">
+            <h3 class="chat-log__author">Felipe <small>14:30</small></h3>
+            <div class="chat-log__message">Bonjour, tout va bien avec le cactus?</div>
+          </div>
+          <div class="chat-log__item chat-log__item--own">
+            <h3 class="chat-log__author">Fabrício <small>14:30</small></h3>
+            <div class="chat-log__message">Bonjour, oui et non...</div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-form">
+        <div class="container ">
+          <form id="FormSelctPlante" method="post" class="form-horizontal">
+            <div class="row">
+              <div class="col-sm-10 col-xs-8">
+                <input type="text" class="form-control" id="" placeholder="Message" />
+                <input type="hidden" id="planteselectinput" name="planteselectinput" value="marche pas">
+              </div>
+              <div class="col-sm-2 col-xs-4">
+                <button onclick="PlanteSelectForm(this)" data-idplante="{{ planteselected.Id }}" class="btn btn-success btn-block">Send</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        </br>
+      </div> 
+    </div>
+
+
+
 
 
 
@@ -84,7 +212,12 @@
         <a href="javascript:void(0)" class="closed" onclick="closeNav('DivContextuelCarte')" style="position: absolute; left: 260px">&times;</a>
     </div>
 
-
+    {# Formulaire caché #}
+    <div hidden>
+        <form action="/SuiviDeLaPlante" id="FormSelctPlante" method="post">
+          
+        </form>
+    </div>
 
     <script>
 
@@ -122,6 +255,12 @@
             elinput.value = el.dataset.idplante;
         }
 
+        //clique sur bouton send message
+        function PlanteSelectForm(elementself) {
+            elinput=document.getElementById("planteselectinput");
+            elinput.value = elementself.dataset.idplante;
+            document.getElementById("FormSelctPlante").submit();
+        }
 
     </script>
 {% endblock %}
