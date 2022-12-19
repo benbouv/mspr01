@@ -11,6 +11,18 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PlanteRepository::class)]
 class Plante
 {
+
+    const FAMILLELIST = [
+        0 => 'Je ne connais pas',
+        1 => 'Plante à fleur',
+        2 => 'Cactus',
+        3 => 'Herbacées',
+        4 => 'Arbres',
+        5 => 'Algues',
+        6 => 'Autre?'
+    ];
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

@@ -3,8 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Plante;
+use App\Form\PlanteEntrerType;
 use App\Repository\PlanteRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -13,9 +17,10 @@ class MesPlantesController extends AbstractController
 
     private $repository;
 
-    public function __construct(PlanteRepository $planteRepository)
+    public function __construct(PlanteRepository $planteRepository,  EntityManagerInterface $em)
     {
         $this->repository = $planteRepository;
+        $this->em = $em;
     }
 
 
@@ -59,6 +64,35 @@ class MesPlantesController extends AbstractController
         if (isset($plantes[0])){
             $plante = $plantes[0];
             $this->repository->remove($plante,true);
+        }
+        
+        return $this->redirect("/mesplantes");
+    
+    }
+
+    #[Route('/mesplantes/edit_plante', name: 'app_mesplantesedit')]
+    public function editplante(Request $request)
+    {
+        $plantes = $this->repository->findById($_POST['idplanteinput']);
+        dump($_POST['idplanteinput']);
+        if (isset($plantes[0])){
+            $plante = $plantes[0];
+
+            $form = $this->createForm(PlanteEntrerType::class, $plante);
+            $form->handleRequest($request);
+
+            if($form->isSubmitted() && $form->isValid())
+            {
+                $this->em->flush();
+                return $this->redirect("/mesplantes");
+            }
+
+            return $this->render('MesPlantes/MesPlantesEdit.html.twig',[
+                'planteselected' => $plante,
+                'form' => $form->createView()
+            ]);
+
+            //$this->repository->save($plante,true);
         }
         
         return $this->redirect("/mesplantes");

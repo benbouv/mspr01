@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la Plante{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+
+{% block body %}
+
+  <div class="container mt-4">
+    <h1>Modifier les informations</h1>
+    {{ form_start(form) }}
+      {{ form_rest(form) }}
+      <input type="hidden" name="idplanteinput" value="{{planteselected.Id}}">
+      <button class="btn btn-primary">Modifier</button>
+    {{ form_end(form) }}
+  </div>
+
+{% endblock %}

@@ -117,15 +117,26 @@
       </div>
     </div>
 
-    <div id="DivContextuelCarte" class="overlay">
+    <div id="DivContextuelCarte" class="overlay" style="display: inline-block">
         <a href="javascript:void(0)" class="closed" onclick="closeNav('DivContextuelCarte')" style="position: relative;">&times;</a>
+        <br>
+        <form action="/mesplantes/edit_plante" method="post">
+          <div class="col-12">
+            <input type="hidden" id="idplanteinputedit" name="idplanteinput" value="marche pas">
+            <button class="btn btn-primary" onclick="GetEditPlanteId()" type="submit">Modifier</button>
+          </div>
+        </form>
+        <br>
+        <br>
         <br>
         <form action="/mesplantes/suppr_plante" method="post">
           <div class="col-12">
-            <input type="hidden" id="idplanteinput" name="idplanteinput" value="marche pas">
-            <button class="btn btn-primary" onclick="GetSupprPlanteId()" type="submit">Supprimer</button>
+            <input type="hidden" id="idplanteinputsuppr" name="idplanteinput" value="marche pas">
+            <button class="btn btn-danger" onclick="GetSupprPlanteId()" type="submit">Supprimer</button>
           </div>
         </form>
+        <br>
+        <br>
     </div>
 
 
@@ -217,7 +228,7 @@
         function ClicDroitCarte(elementself) {
             el=document.getElementById("DivContextuelCarte");
             el.style.width = "8em";
-            el.style.height = "10em";
+            el.style.height = "auto";
             el.style.position = "absolute";
             el.style.top = getOffset(elementself).top;
             el.style.left = getOffset(elementself).left;
@@ -225,7 +236,12 @@
         }
         function GetSupprPlanteId(){
             el=document.getElementById("DivContextuelCarte");
-            elinput=document.getElementById("idplanteinput");
+            elinput=document.getElementById("idplanteinputsuppr");
+            elinput.value = el.dataset.idplante;
+        }
+        function GetEditPlanteId(){
+            el=document.getElementById("DivContextuelCarte");
+            elinput=document.getElementById("idplanteinputedit");
             elinput.value = el.dataset.idplante;
         }
 
