@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Plante;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -19,6 +20,11 @@ class PlanteEntrerType extends AbstractType
             ])
             ->add('famille',ChoiceType::class, [
                 'choices' => $this->getChoices()
+            ])
+            ->add('image', FileType::class, [
+                'label' => 'Image de la plante',
+                'mapped' => false,
+                'required' => false
             ])
             // ->add('positionGPS')
             // ->add('userOwningPlant')

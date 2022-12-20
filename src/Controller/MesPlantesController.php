@@ -49,10 +49,22 @@ class MesPlantesController extends AbstractController
         $plante->setNom($_POST['nom']);
         $plante->setFamille($_POST['type']);
         $plante->setPeriodeArrosage($_POST['description']);
+        // image traitement et envoi
+        // if (!empty($_FILES['photo']))
+        // {
+        //     $image_brut = $_FILES['photo'];
+        //     $fichier_nom = md5(uniqid()) . '.' . substr(strrchr($image_brut['name'], '.'), 1);
+        //     $fichier_dir = $this->getParameter('images_directory') . $fichier_nom;
+
+        //     move_uploaded_file($image_brut['name'], $fichier_dir);
+        //     $plante->setImage($fichier_nom);
+            
+        //     //$image_blob = addslashes(file_get_contents($image_brut["tmp_name"]));
+        //     //$plante->setImage($image_brut["name"]);
+        // }
         $this->repository->save($plante,true);
         
         return $this->redirect("/mesplantes");
-    
     }
 
     #[Route('/mesplantes/suppr_plante', name: 'app_mesplantessuppr')]
@@ -63,6 +75,14 @@ class MesPlantesController extends AbstractController
 
         if (isset($plantes[0])){
             $plante = $plantes[0];
+
+            //supression de l'image
+            $fichier_directory = $this->getParameter('images_directory');
+            if (is_file($fichier_directory . '/' . $plante->getImage()) && $plante->getImage() !== null)
+            {
+                unlink($fichier_directory . '/' . $plante->getImage());
+            }
+
             $this->repository->remove($plante,true);
         }
         
@@ -83,6 +103,21 @@ class MesPlantesController extends AbstractController
 
             if($form->isSubmitted() && $form->isValid())
             {
+                $image = $form->get('image')->getData();
+                if ($image !== null)
+                {
+                    $fichier_nom = md5( uniqid("image")) . '.' . $image->guessExtension();
+                    $fichier_directory = $this->getParameter('images_directory');
+
+                    //supression de l'ancienne image
+                    if (is_file($fichier_directory . '/' . $plante->getImage()) && $plante->getImage() !== null)
+                    {
+                        unlink($fichier_directory . '/' . $plante->getImage());
+                    }
+
+                    $image->move( $fichier_directory, $fichier_nom);
+                    $plante->setImage($fichier_nom);
+                }
                 $this->em->flush();
                 return $this->redirect("/mesplantes");
             }

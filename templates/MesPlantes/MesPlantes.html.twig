@@ -97,9 +97,9 @@
               </select>
               <br/>
 
-              <label for="formFileSm" name="photo" class="form-label">Photo de la plante</label>
+              {# <label for="formFileSm" name="photo" class="form-label">Photo de la plante</label>
               <input class="form-control form-control-sm" id="formFileSm" type="file">
-              <br/>
+              <br/> #}
               <p>***</p>
 
               <label for="exampleFormControlTextarea1" class="form-label">Information sur la plante</label>
@@ -144,9 +144,11 @@
 
     <div class="container">
         <h1>Vos dernières plantes</h1>
-        <small>- Click-droit et selectionnez "supprimer" pour effacer des plantes.</small>
-        </br>
-        <small>- Appuyer sur l'icon "+" pour ajouter une plante.</small>
+        <div>
+            <small>- Pour supprimer ou modifier : faite Click-droit.</small>
+            </br>
+            <small>- Appuyer sur l'icon "+" pour ajouter une plante.</small>
+        </div>
         </br>
         </br>
         
@@ -169,7 +171,11 @@
                         <div class="card" id="overfly{{ plante.Id }}" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style="height: 12em; 
                             color: black;
                             ">
-                            <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
+                            {% if plante.image == null %}
+                                <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
+                            {% else %}
+                                <img src="{{ asset('uploads/' ~ plante.image) }}" class="card-img-top" alt="...">  
+                            {% endif %}
                             <div class="card-body">
                                 <h4 class="card-title" style="text-align: center;">{{ plante.Nom }}</h4>
                             </div>
