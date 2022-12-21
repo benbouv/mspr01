@@ -134,37 +134,34 @@
 
     {# Carousel #}
     <div id="carousell2">
-          <div class= "container testimonial-group">
-              <div class="row d-flex flex-row flex-nowrap">
-                  <div class="card card-body" style="width: 9em ">
-                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
-                      <div class="card-body">
-                          <small>18/12/2022 14:27</small>
-                      </div>
-                  </div>
-                  <div class="card card-body">
-                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top"  alt="...">
-                  </div>
-                  <div class="card card-body">
-                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
-                  </div>
-                  <div class="card card-body">
-                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
-                  </div>
-                  <div class="card card-body">
-                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
-                  </div>
-                  <div class="card card-body">
-                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
-                  </div>
-                  <div class="card card-body">
-                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
-                  </div>
-                  <div class="card card-body">
-                      <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" alt="...">
-                  </div>
-              </div>
-          </div>
+        <div class= "container testimonial-group">
+            <div class="row d-flex flex-row flex-nowrap">
+                <div class="col-3" style="height: 18em; width: 9em; margin-right: 2em;">
+                    <a href="{{ path('app_suiviplanteaddphoto', {id: planteselected.Id}) }}" style="text-decoration: none;">
+                        <div class="card" style="height: 17em; width: 9em;">
+                              <img src="{{ asset('build/img/icon-add.png') }}" alt="..." style=" 
+                                  transform:scale(0.50);
+                                  padding: 1em;
+                                  margin-top: 3.6em;
+                                  "
+                              >
+                        </div>
+                    </a>
+                </div>
+                {% for photo in photosdelaplante %}
+                    <div class="col-3" style="height: 18em; width: 18em; margin-right: 0.1em;">
+                        <a href="{{ asset('uploads/' ~ photo.name) }}" target="_blank" style="text-decoration: none; color:black;">
+                            <div class="card" style="height: 17em; width: 17em; text-align: center; padding: 0.2em;">
+                                <img src="{{ asset('uploads/' ~ photo.name) }}" style="height: 15em; max-width: 17em;" class="card-img-top" alt="...">  
+                                <div class="card-title">
+                                    <p>{{ photo.date|date('Y-m-d H:i') }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 
 
@@ -208,16 +205,15 @@
 
 
     {# element contextuel #}
-    <div id="DivContextuelCarte" class="overlay">
+    {# <div id="DivContextuelCarte" class="overlay">
         <a href="javascript:void(0)" class="closed" onclick="closeNav('DivContextuelCarte')" style="position: absolute; left: 260px">&times;</a>
-    </div>
+    </div> #}
 
     {# Formulaire caché #}
-    <div hidden>
+    {# <div hidden>
         <form action="/SuiviDeLaPlante" id="FormSelctPlante" method="post">
-          
         </form>
-    </div>
+    </div> #}
 
     <script>
 

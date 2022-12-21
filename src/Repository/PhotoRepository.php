@@ -39,6 +39,17 @@ class PhotoRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByPlanteId($idvalue): array
+    {
+         return $this->createQueryBuilder('p')
+            ->andWhere('p.PlantePossedePhoto = :val')
+            ->setParameter('val', $idvalue)
+            ->getQuery()
+            ->getResult()
+         ;
+    }
+
+    
 //    /**
 //     * @return Photo[] Returns an array of Photo objects
 //     */
