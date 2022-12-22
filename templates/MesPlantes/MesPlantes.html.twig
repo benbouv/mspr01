@@ -174,11 +174,13 @@
                             height: 12em; 
                             color: black;
                             ">
-                            {% if plante.image == null %}
-                                <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" style="height: 8em; max-width: 7em;" alt="...">
-                            {% else %}
-                                <img src="{{ asset('uploads/' ~ plante.image) }}" class="card-img-top" style="height: 8em; max-width: 7em;" alt="...">  
-                            {% endif %}
+                            <div style="height: 8em;">
+                                {% if plante.image == null %}
+                                    <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" style="max-height: 8em; max-width: 7em;" alt="...">
+                                {% else %}
+                                    <img src="{{ asset('uploads/' ~ plante.image) }}" class="card-img-top" style="max-height: 8em; max-width: 7em;" alt="...">  
+                                {% endif %}
+                            </div>
                             <div class="card-title">
                                 <h4  style="text-align: center;">{{ plante.Nom }}</h4>
                             </div>

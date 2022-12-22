@@ -40,14 +40,23 @@ class PlanteRepository extends ServiceEntityRepository
     }
 
     public function findById($idvalue)
-   {
+    {
         return $this->createQueryBuilder('p')
            ->andWhere('p.id = :val')
            ->setParameter('val', $idvalue)
            ->getQuery()
            ->getResult()
         ;
-   }
+    }
+
+    public function findAllById()
+    {
+        return $this->createQueryBuilder('p')
+           ->orderBy('p.id', 'DESC')
+           ->getQuery()
+           ->getResult()
+        ;
+    }
 
 
 //    /**

@@ -12,6 +12,9 @@
             </a>
         {% endif %}
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <a class="label" href="{{ path('app_logout') }}" style="text-decoration:none">
+                Déconnexion
+            </a>
             <button type="button" class="p-button-rounded" style="cursor: pointer;">
                 <span class="p-button-label">mon compte</span>
             </button>

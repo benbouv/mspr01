@@ -29,7 +29,7 @@ class MesPlantesController extends AbstractController
     #[Route('/mesplantes', name: 'app_mesplantes')]
     public function index(): Response
     {
-        $plantes = $this->repository->findAll();
+        $plantes = $this->repository->findAllById();
         // $plante = new Plante;
         // $plante->setNom("rose");
         // $this->repository->save($plante,false);
@@ -118,6 +118,8 @@ class MesPlantesController extends AbstractController
                     $image->move( $fichier_directory, $fichier_nom);
                     $plante->setImage($fichier_nom);
                 }
+
+                $plante->setFamille($plante::FAMILLELIST[$plante->getFamille()]);
                 $this->em->flush();
                 return $this->redirect("/mesplantes");
             }
