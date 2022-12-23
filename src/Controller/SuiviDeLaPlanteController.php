@@ -2,14 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Message;
 use App\Entity\Photo;
 use App\Entity\Plante;
 use App\Form\PhotoentrerType;
+use App\Repository\MessageRepository;
 use App\Repository\PhotoRepository;
 use App\Repository\PlanteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,29 +22,72 @@ class SuiviDeLaPlanteController extends AbstractController
 
     private $repository;
 
-    public function __construct(PlanteRepository $planteRepository, PhotoRepository $photoRepository, EntityManagerInterface $em)
+    public function __construct(PlanteRepository $planteRepository, 
+        PhotoRepository $photoRepository, 
+        MessageRepository $messageRepository,
+        EntityManagerInterface $em,
+        Security $security
+        )
     {
         $this->repository = $planteRepository;
         $this->repository_photo = $photoRepository;
+        $this->repository_messages = $messageRepository;
         $this->em = $em;
+        $this->security = $security;
     }
 
 
 
-    #[Route('/SuiviDeLaPlante{id}', name: 'app_suiviplante')]
+    #[Route('/user/mesplantes/SuiviDeLaPlante{id}', name: 'app_suiviplante')]
     public function index(Plante $plante): Response
     {
-        $photos = $this->repository_photo->findByPlanteId($plante->getId());
-        $photos = array_reverse($photos);
-        return $this->render('MesPlantes/MaPlante.html.twig', [
-            'photosdelaplante' => $photos,
-            'planteselected' => $plante
+        $user = $this->security->getUser();
+        if(!empty($user))
+        {
+            $photos = $this->repository_photo->findByPlanteId($plante->getId());
+            $photos = array_reverse($photos);
+
+            //$userId = $user->getId();
+            // $us_pr_messages = $this->repository_messages->findByUserPrId($userId);
+            // $us_other_messages = $this->repository_messages->findByUserOtherId($userId);
+            // $us_botanist_messages = $this->repository_messages->findByUserBotanistId($userId);
+            // $messages = array_merge($us_pr_messages,$us_other_messages,$us_botanist_messages);
+
+            $messages = $this->repository_messages->findByAllByIdPlante($plante->getId());
+
+            return $this->render('MesPlantes/MaPlante.html.twig', [
+                'photosdelaplante' => $photos,
+                'planteselected' => $plante,
+                'messagess' => $messages
+            ]);
+        }
+        return $this->redirectToRoute('app_register');
+    }
+
+
+    // ADD MESSAGE \\
+
+    #[Route('/user/mesplantes/SuiviDeLaPlante{id}/addmes', name: 'app_suiviplante_addmessage')]
+    public function formaddmessage(Plante $plante)
+    {
+        $message = new Message;
+        $message->setContenu($_POST['infomessage']);
+        $message->setDate(new \DateTime());
+        $message->setUserWritingMessage($this->security->getUser());
+        $message->setPlantInformedByMessage($plante);
+
+        $this->repository_messages->save($message,true);
+        
+        return $this->redirectToRoute('app_suiviplante', [
+            'id' => $plante->getId()
         ]);
     }
 
 
 
-    #[Route('/SuiviDeLaPlante{id}/addphoto', name: 'app_suiviplanteaddphoto')]
+    // ADD PHOTO \\
+
+    #[Route('/user/mesplantes/SuiviDeLaPlante{id}/addphoto', name: 'app_suiviplanteaddphoto')]
     public function formaddphot(Plante $plante, Request $request)
     {
         $photo = new Photo;

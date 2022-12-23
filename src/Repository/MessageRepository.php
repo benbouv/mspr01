@@ -39,6 +39,60 @@ class MessageRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByUserPrId($idvalue): array
+    {
+         return $this->createQueryBuilder('p')
+            ->andWhere('p.userWritingMessage = :val')
+            ->setParameter('val', $idvalue)
+            ->getQuery()
+            ->getResult()
+         ;
+    }
+
+    public function findByUserOtherId($idvalue): array
+    {
+         return $this->createQueryBuilder('p')
+            ->andWhere('p.userReceivingMessage = :val')
+            ->setParameter('val', $idvalue)
+            ->getQuery()
+            ->getResult()
+         ;
+    }
+
+    public function findByUserBotanistId($idvalue): array
+    {
+         return $this->createQueryBuilder('p')
+            ->andWhere('p.userAdviseMessage = :val')
+            ->setParameter('val', $idvalue)
+            ->getQuery()
+            ->getResult()
+         ;
+    }
+    public function findByAllByIdPlante($idvalue): array
+    {
+         return $this->createQueryBuilder('p')
+            ->andWhere('p.plantInformedByMessage = :val')
+            ->setParameter('val', $idvalue)
+            ->orderBy('p.date', 'DESC')
+            ->getQuery()
+            ->getResult()
+         ;
+    }
+
+    // public function findByAllByIdPlante($idvalue,$idplante): array
+    // {
+    //      return $this->createQueryBuilder('p')
+    //         ->andWhere('p.userWritingMessage = :val')
+    //         ->andWhere('p.userAdviseMessage = :val')
+    //         ->andWhere('p.userReceivingMessage = :val')
+    //         ->andWhere('p.plantInformedByMessage = :valplante')
+    //         ->setParameters(array('val'=> $idvalue, 'valplante' => $idplante))ATTENTION AU S
+    //         ->orderBy('p.date', 'DESC')
+    //         ->getQuery()
+    //         ->getResult()
+    //      ;
+    // }
+
 //    /**
 //     * @return Message[] Returns an array of Message objects
 //     */

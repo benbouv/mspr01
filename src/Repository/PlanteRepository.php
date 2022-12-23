@@ -58,6 +58,16 @@ class PlanteRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByUserId($idvalue): array
+    {
+         return $this->createQueryBuilder('p')
+            ->andWhere('p.userOwningPlant = :val')
+            ->setParameter('val', $idvalue)
+            ->getQuery()
+            ->getResult()
+         ;
+    }
+
 
 //    /**
 //     * @return Plante[] Returns an array of Plante objects
