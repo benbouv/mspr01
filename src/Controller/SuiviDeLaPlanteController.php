@@ -70,14 +70,25 @@ class SuiviDeLaPlanteController extends AbstractController
     #[Route('/user/mesplantes/SuiviDeLaPlante{id}/addmes', name: 'app_suiviplante_addmessage')]
     public function formaddmessage(Plante $plante)
     {
-        $message = new Message;
-        $message->setContenu($_POST['infomessage']);
-        $message->setDate(new \DateTime());
-        $message->setUserWritingMessage($this->security->getUser());
-        $message->setPlantInformedByMessage($plante);
+        $user = $this->security->getUser();
+        if($user->getPlantesKept()===$plante || $plante->getUserOwningPlant()===$user)
+        {
+            $message = new Message;
+            $message->setContenu($_POST['infomessage']);
+            $message->setDate(new \DateTime());
+            $message->setUserWritingMessage($this->security->getUser());
+            $message->setPlantInformedByMessage($plante);
 
-        $this->repository_messages->save($message,true);
-        
+            $this->repository_messages->save($message,true);
+            
+            return $this->redirectToRoute('app_suiviplante', [
+                'id' => $plante->getId()
+            ]);
+        }
+        else
+        {
+            $this->addFlash('AddMessageNonPermis','Non autorisé. Seul les utilisateurs responsables de la plante peuvent ajouter un message.');
+        }
         return $this->redirectToRoute('app_suiviplante', [
             'id' => $plante->getId()
         ]);
@@ -90,45 +101,51 @@ class SuiviDeLaPlanteController extends AbstractController
     #[Route('/user/mesplantes/SuiviDeLaPlante{id}/addphoto', name: 'app_suiviplanteaddphoto')]
     public function formaddphot(Plante $plante, Request $request)
     {
-        $photo = new Photo;
-        $form = $this->createForm(PhotoentrerType::class, $photo);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid())
+        $user = $this->security->getUser();
+        if($user->getPlantesKept()===$plante || $plante->getUserOwningPlant()===$user)
         {
+            $photo = new Photo;
+            $form = $this->createForm(PhotoentrerType::class, $photo);
+            $form->handleRequest($request);
 
-            $image = $form->get('name')->getData();
-            if ($image !== null)
+            if($form->isSubmitted() && $form->isValid())
             {
-                $fichier_nom = md5( uniqid("image")) . '.' . $image->guessExtension();
-                $fichier_directory = $this->getParameter('images_directory');
-
-                //supression de l'ancienne image
-                if (is_file($fichier_directory . '/' . $photo->getName()) && $photo->getName() !== null)
+                $image = $form->get('name')->getData();
+                if ($image !== null)
                 {
-                    unlink($fichier_directory . '/' . $photo->getName());
+                    $fichier_nom = md5( uniqid("image")) . '.' . $image->guessExtension();
+                    $fichier_directory = $this->getParameter('images_directory');
+                    //supression de l'ancienne image
+                    if (is_file($fichier_directory . '/' . $photo->getName()) && $photo->getName() !== null)
+                    {
+                        unlink($fichier_directory . '/' . $photo->getName());
+                    }
+                    //ajout de la nouvelle photo
+                    $image->move( $fichier_directory, $fichier_nom);
+                    $photo->setName($fichier_nom);
+                    $photo->setDate(new \DateTime());
+                    $photo->setPlantePossedePhoto($plante);
+                    //set l'image de la carte de la plante, si pas d'image
+                    if($plante->getImage()===null)
+                    {
+                        $plante->setImage($fichier_nom);
+                    }
+                    $this->repository_photo->save($photo,true);
                 }
-
-                $image->move( $fichier_directory, $fichier_nom);
-                $photo->setName($fichier_nom);
-                $photo->setDate(new \DateTime());
-                $photo->setPlantePossedePhoto($plante);
-
-                //set l'image de la carte de la plante, si pas d'image
-                if($plante->getImage()===null)
-                {
-                    $plante->setImage($fichier_nom);
-                }
-
-                $this->repository_photo->save($photo,true);
+                return $this->redirectToRoute('app_suiviplante', [
+                    'id' => $plante->getId()
+                ]);
             }
-            return $this->redirectToRoute('app_suiviplante', [
-                'id' => $plante->getId()
+            return $this->render('MesPlantes/MaPlanteAddPhoto.html.twig',[
+                'form' => $form->createView()
             ]);
         }
-
-        return $this->render('MesPlantes/MaPlanteAddPhoto.html.twig',[
-            'form' => $form->createView()
+        else
+        {
+            $this->addFlash('AddPhotoNonPermise','Non autorisé. Seul les utilisateurs responsables de la plante peuvent ajouter une photo.');
+        }
+        return $this->redirectToRoute('app_suiviplante', [
+            'id' => $plante->getId()
         ]);
     
     }

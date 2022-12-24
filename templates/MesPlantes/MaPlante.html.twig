@@ -132,6 +132,14 @@
 
     <h1 class="display-6" style="text-align: center;">{{ planteselected.Nom }}</h1>
 
+    {% for infos in app.flashes('AddPhotoNonPermise') %}
+        <div class="alert alert-danger">
+            {{ infos }}
+        </div>
+    {% endfor %}
+
+
+
     {# Carousel #}
     <div id="carousell2">
         <div class= "container testimonial-group">
@@ -169,6 +177,13 @@
 
 
 
+    {% for infos in app.flashes('AddMessageNonPermis') %}
+        <div class="alert alert-danger">
+            {{ infos }}
+        </div>
+    {% endfor %}
+
+    
     {# Chat #}
     <div class="main">
       <div class="container text-center col-8 ">
@@ -210,18 +225,11 @@
 
 
 
-    {# element contextuel #}
-    {# <div id="DivContextuelCarte" class="overlay">
-        <a href="javascript:void(0)" class="closed" onclick="closeNav('DivContextuelCarte')" style="position: absolute; left: 260px">&times;</a>
-    </div> #}
 
-    {# Formulaire caché #}
-    {# <div hidden>
-        <form action="/SuiviDeLaPlante" id="FormSelctPlante" method="post">
-        </form>
-    </div> #}
 
     <script>
+
+
 
         //effets des cartes
         function overclickbrigth($byId) {
@@ -239,7 +247,6 @@
             el.style.borderColor = "rgba(0, 0, 0, 0.2)";
             el.style.borderWidth = "1px";
         }
-
         
         //clique droit overlays
         function ClicDroitCarte(elementself) {

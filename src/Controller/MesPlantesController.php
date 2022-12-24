@@ -46,7 +46,9 @@ class MesPlantesController extends AbstractController
 
 
 
+    
 
+    // ADD PLANTE \\
 
     #[Route('/user/mesplantes/form', name: 'app_mesplantesform')]
     public function formaddplante()
@@ -62,12 +64,13 @@ class MesPlantesController extends AbstractController
         return $this->redirectToRoute('app_mesplantes');
     }
 
+    // SUPPR PLANTE \\
+
     #[Route('/user/mesplantes/suppr_plante', name: 'app_mesplantessuppr')]
     public function supprimeplante()
     {
         $plantes = $this->repository->findById($_POST['idplanteinput']);
-        dump($_POST['idplanteinput']);
-
+        //dump($_POST['idplanteinput']);
         if (isset($plantes[0])){
             $plante = $plantes[0];
 
@@ -80,10 +83,10 @@ class MesPlantesController extends AbstractController
 
             $this->repository->remove($plante,true);
         }
-        
         return $this->redirectToRoute('app_mesplantes');
-    
     }
+
+    // EDIT PLANTE \\
 
     #[Route('/user/mesplantes/edit_plante', name: 'app_mesplantesedit')]
     public function editplante(Request $request)
