@@ -47,12 +47,6 @@ class SuiviDeLaPlanteController extends AbstractController
             $photos = $this->repository_photo->findByPlanteId($plante->getId());
             $photos = array_reverse($photos);
 
-            //$userId = $user->getId();
-            // $us_pr_messages = $this->repository_messages->findByUserPrId($userId);
-            // $us_other_messages = $this->repository_messages->findByUserOtherId($userId);
-            // $us_botanist_messages = $this->repository_messages->findByUserBotanistId($userId);
-            // $messages = array_merge($us_pr_messages,$us_other_messages,$us_botanist_messages);
-
             $messages = $this->repository_messages->findByAllByIdPlante($plante->getId());
 
             return $this->render('MesPlantes/MaPlante.html.twig', [
@@ -71,7 +65,7 @@ class SuiviDeLaPlanteController extends AbstractController
     public function formaddmessage(Plante $plante)
     {
         $user = $this->security->getUser();
-        if($user->getPlantesKept()===$plante || $plante->getUserOwningPlant()===$user)
+        if($this->UserIsPlanteAllowed($user,$plante))
         {
             $message = new Message;
             $message->setContenu($_POST['infomessage']);
@@ -102,7 +96,7 @@ class SuiviDeLaPlanteController extends AbstractController
     public function formaddphot(Plante $plante, Request $request)
     {
         $user = $this->security->getUser();
-        if($user->getPlantesKept()===$plante || $plante->getUserOwningPlant()===$user)
+        if($this->UserIsPlanteAllowed($user,$plante))
         {
             $photo = new Photo;
             $form = $this->createForm(PhotoentrerType::class, $photo);
@@ -149,4 +143,26 @@ class SuiviDeLaPlanteController extends AbstractController
         ]);
     
     }
+
+
+    //user is allowed if gardien ou proprio de la plante
+    private function UserIsPlanteAllowed($user,$plante): bool
+    {
+        if($user->getPlantesKept()===$plante || $plante->getUserOwningPlant()===$user)
+        {
+            return true;
+        }
+
+        //botaniste?
+        $a = $user->getRoles();
+        foreach ($a as $v) {
+            if($v==="ROLE_BOTANIST")
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

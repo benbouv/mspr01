@@ -101,6 +101,7 @@
         border-radius: 4px;
         box-shadow: 0 1px 2px rgba(0,0,0,.1);
         clear: both;
+        text-align: left;
       }
 
       .chat-log__item.chat-log__item--own {
@@ -161,7 +162,7 @@
                         <a href="{{ asset('uploads/' ~ photo.name) }}" target="_blank" style="text-decoration: none; color:black;">
                             <div class="card" style="height: 17em; width: 17em; text-align: center; padding: 0.2em;">
                                 <div style="height: 15em;">
-                                    <img src="{{ asset('uploads/' ~ photo.name) }}" style="max-height: 15em; max-width: 17em;" class="card-img-top" alt="...">
+                                    <img src="{{ asset('uploads/' ~ photo.name) }}" style="max-height: 15em; max-width: 16em;" class="card-img-top" alt="...">
                                 </div> 
                                 <div class="card-title">
                                     <p>{{ photo.date|date('Y-m-d H:i') }}</p>
@@ -190,19 +191,55 @@
         <div class="chat-log">
           {% for message in messagess %}
             {% if message.userWritingMessage != app.user  %}
-              <div class="chat-log__item">
-                <h3 class="chat-log__author">{{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
-                <div class="chat-log__message">{{ message.contenu }}</div>
-              </div>
+
+              {% set continue = true %}
+              {% for role in message.userWritingMessage.roles %}
+                {% if role == "ROLE_BOTANIST"  %}
+                  {% set continue = false %}
+                  <div class="chat-log__item" style="background: #c3bd74; text-align: center;">
+                    <h6>(botaniste certifié ✩✩✩✩)</h6>
+                    <div class="chat-log__item">
+                      <h3 class="chat-log__author">{{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
+                      <div class="chat-log__message">{{ message.contenu }}</div>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+              {% if continue %}
+                <div class="chat-log__item">
+                  <h3 class="chat-log__author">{{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
+                  <div class="chat-log__message">{{ message.contenu }}</div>
+                </div>
+              {% endif %}
+
             {% else %}
-              <div class="chat-log__item chat-log__item--own">
-                <h3 class="chat-log__author"> {{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
-                <div class="chat-log__message">{{ message.contenu }}</div>
-              </div>
+
+              {% set continue = true %}
+              {% for role in message.userWritingMessage.roles %}
+                {% if role == "ROLE_BOTANIST"  %}
+                  {% set continue = false %}
+                  <div class="chat-log__item chat-log__item--own" style="background: #c3bd74; text-align: center;">
+                    <h6>(botaniste certifié ✩✩✩✩)</h6>
+                    <div class="chat-log__item chat-log__item--own">
+                      <h3 class="chat-log__author"> {{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
+                      <div class="chat-log__message">{{ message.contenu }}</div>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+              {% if continue %}
+                <div class="chat-log__item chat-log__item--own">
+                  <h3 class="chat-log__author"> {{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
+                  <div class="chat-log__message">{{ message.contenu }}</div>
+                </div>
+              {% endif %}
+
             {% endif %}
           {% endfor %}
         </div>
       </div>
+      </br>
+      </br>
       <div class="chat-form">
         <div class="container ">
           <form id="FormSelctPlante" action="{{ path('app_suiviplante_addmessage', {id: planteselected.id}) }}" method="post" class="form-horizontal">
@@ -210,7 +247,7 @@
               <div class="col-sm-10 col-xs-8">
                 <input type="text" class="form-control" name="infomessage" placeholder="Message" />
               </div>
-              <div class="col-sm-2 col-xs-4">
+              <div style="text-align: right;">
                 <button class="btn btn-success btn-block">Send</button>
               </div>
             </div>

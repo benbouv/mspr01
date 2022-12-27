@@ -125,7 +125,7 @@
 
 
     {# Tableau des cartes de plantes disponibles #}
-    <div class="container">
+    <div style="margin-left: 2.5em">
         <h1>Vos dernières plantes ({{ app.user.email }})</h1>
         <div>
             <small>- Pour supprimer ou modifier : faite Click-droit.</small>
@@ -192,7 +192,7 @@
           <br>
           <br>
           <br>
-          <form action="{{ path('app_mesplantessuppr') }}" method="post" onsubmit="return confirm('Etes vous sûr?')">
+          <form action="{{ path('app_mesplantessuppr') }}" method="post" onsubmit="return confirm('Etes-vous bien sûr de vouloir supprimer cette plante?')">
             <div>
               <input type="hidden" id="idplanteinputsuppr" name="idplanteinput" value="marche pas">
               {# <input type="hidden" name="_token" value="{{csrf_token('delete')}}"> #}
@@ -267,13 +267,6 @@
             elinput.value = elementself.dataset.idplante;
             document.getElementById("FormSelctPlante").submit();
         } #}
-
-        $(document).ready(function()
-        { 
-            $(document).bind("contextmenu",function(e){
-                return false;
-            }); 
-        })
 
     </script>
 {% endblock %}
