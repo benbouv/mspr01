@@ -243,11 +243,11 @@
       <div class="chat-form">
         <div class="container ">
           <form id="FormSelctPlante" action="{{ path('app_suiviplante_addmessage', {id: planteselected.id}) }}" method="post" class="form-horizontal">
-            <div class="row">
-              <div class="col-sm-10 col-xs-8">
+            <div style="display: flex;">
+              <div style="flex: 90%; margin-right: 2em;">
                 <input type="text" class="form-control" name="infomessage" placeholder="Message" />
               </div>
-              <div style="text-align: right;">
+              <div style="flex: 10%;">
                 <button class="btn btn-success btn-block">Send</button>
               </div>
             </div>
