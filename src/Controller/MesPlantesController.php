@@ -74,14 +74,22 @@ class MesPlantesController extends AbstractController
         if (isset($plantes[0])){
             $plante = $plantes[0];
 
-            //supression de l'image
-            $fichier_directory = $this->getParameter('images_directory');
-            if (is_file($fichier_directory . '/' . $plante->getImage()) && $plante->getImage() !== null)
+            $user = $this->security->getUser();
+            if($plante->getUserOwningPlant()===$user)
             {
-                unlink($fichier_directory . '/' . $plante->getImage());
+                //supression de l'image
+                $fichier_directory = $this->getParameter('images_directory');
+                if (is_file($fichier_directory . '/' . $plante->getImage()) && $plante->getImage() !== null)
+                {
+                    unlink($fichier_directory . '/' . $plante->getImage());
+                }
+                $this->repository->remove($plante,true);
+            }
+            else
+            {
+                return $this->redirectToRoute('app_home');
             }
 
-            $this->repository->remove($plante,true);
         }
         return $this->redirectToRoute('app_mesplantes');
     }
@@ -101,24 +109,33 @@ class MesPlantesController extends AbstractController
 
             if($form->isSubmitted() && $form->isValid())
             {
-                $image = $form->get('image')->getData();
-                if ($image !== null)
+                $user = $this->security->getUser();
+                if($plante->getUserOwningPlant()===$user)
                 {
-                    $fichier_nom = md5( uniqid("image")) . '.' . $image->guessExtension();
-                    $fichier_directory = $this->getParameter('images_directory');
-
-                    //supression de l'ancienne image
-                    if (is_file($fichier_directory . '/' . $plante->getImage()) && $plante->getImage() !== null)
+                    $image = $form->get('image')->getData();
+                    if ($image !== null)
                     {
-                        unlink($fichier_directory . '/' . $plante->getImage());
+                        $fichier_nom = md5( uniqid("image")) . '.' . $image->guessExtension();
+                        $fichier_directory = $this->getParameter('images_directory');
+    
+                        //supression de l'ancienne image
+                        if (is_file($fichier_directory . '/' . $plante->getImage()) && $plante->getImage() !== null)
+                        {
+                            unlink($fichier_directory . '/' . $plante->getImage());
+                        }
+    
+                        $image->move( $fichier_directory, $fichier_nom);
+                        $plante->setImage($fichier_nom);
                     }
-
-                    $image->move( $fichier_directory, $fichier_nom);
-                    $plante->setImage($fichier_nom);
+    
+                    $plante->setFamille($plante::FAMILLELIST[$plante->getFamille()]);
+                    $this->em->flush();
+                }
+                else
+                {
+                    return $this->redirectToRoute('app_home');
                 }
 
-                $plante->setFamille($plante::FAMILLELIST[$plante->getFamille()]);
-                $this->em->flush();
                 return $this->redirectToRoute('app_mesplantes');
             }
 
