@@ -103,6 +103,17 @@ class MesPlantesController extends AbstractController
         dump($_POST['idplanteinput']);
         if (isset($plantes[0])){
             $plante = $plantes[0];
+            
+            //traitement du choice familly
+            $choices = $plante::FAMILLELIST;
+            foreach($choices as $k => $v)
+            {
+                if($v === $plante->getFamille())
+                {
+                    $plante->setFamille($k);
+                    break 1;
+                }
+            }
 
             $form = $this->createForm(PlanteEntrerType::class, $plante);
             $form->handleRequest($request);
