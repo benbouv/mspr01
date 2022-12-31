@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Plante;
 use App\Form\PlanteEntrerType;
+use App\Repository\PhotoRepository;
+use App\Repository\MessageRepository;
 use App\Repository\PlanteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,9 +19,16 @@ class MesPlantesController extends AbstractController
 
     private $repository;
 
-    public function __construct(PlanteRepository $planteRepository,  EntityManagerInterface $em, Security $security)
+    public function __construct(PlanteRepository $planteRepository,  
+        EntityManagerInterface $em, 
+        Security $security,
+        MessageRepository $messageRepository,
+        PhotoRepository $photoRepository
+        )
     {
         $this->repository = $planteRepository;
+        $this->repository_photo = $photoRepository;
+        $this->repository_messages = $messageRepository;
         $this->em = $em;
         $this->security = $security;
     }
@@ -83,6 +92,25 @@ class MesPlantesController extends AbstractController
                 {
                     unlink($fichier_directory . '/' . $plante->getImage());
                 }
+                
+                //suppression de toutes les photos
+                $photos = $this->repository_photo->findByPlanteId($plante->getId());
+                foreach($photos as $photo)
+                {
+                    if (is_file($fichier_directory . '/' . $photo->getName()) && $photo->getName() !== null)
+                    {
+                        unlink($fichier_directory . '/' . $photo->getName());
+                    }
+                    $this->repository_photo->remove($photo,true);
+                }
+
+                //suppression de tous les messages
+                $messages = $this->repository_messages->findByAllByIdPlante($plante->getId());
+                foreach($messages as $message)
+                {
+                    $this->repository_messages->remove($message,true);
+                }
+
                 $this->repository->remove($plante,true);
             }
             else
