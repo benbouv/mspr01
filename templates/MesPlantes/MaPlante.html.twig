@@ -158,15 +158,23 @@
                     </a>
                 </div>
                 {% for photo in photosdelaplante %}
-                    <div class="col-3" style="height: 18em; width: 18em; margin-right: 0.1em;">
-                        <a href="{{ asset('uploads/' ~ photo.name) }}" target="_blank" style="text-decoration: none; color:black;">
-                            <div class="card" style="height: 17em; width: 17em; text-align: center; padding: 0.2em;">
+                    <div class="overlay" id="overflypho{{ photo.Id }}" style="
+                        width: auto; 
+                        height: 0em; 
+                        position: absolute;
+                        color: #b9c7cf;
+                        ">
+                        <a href="{{ path('app_suiviplante_supprphoto', {id: planteselected.Id, photo_id: photo.Id}) }}">🗑</a>
+                    </div>
+                    <div class="col-3" style="height: 19em; width: 18em; margin-right: 0.1em;">
+                        <a href="{{ asset('uploads/' ~ photo.name) }}" target="_blank" style="text-decoration: none; color:black;" oncontextmenu="ClicDroitImage(this,'overflypho{{ photo.Id }}')">
+                            <div class="card" style="height: 18em; width: 17em; text-align: center; padding: 0.2em;">
+                                <div class="card-title" style="height: 1em;">
+                                    <p>{{ photo.date|date('Y-m-d H:i') }}</p>
+                                </div>
                                 <div style="height: 15em;">
                                     <img src="{{ asset('uploads/' ~ photo.name) }}" style="max-height: 15em; max-width: 16em;" class="card-img-top" alt="...">
                                 </div> 
-                                <div class="card-title">
-                                    <p>{{ photo.date|date('Y-m-d H:i') }}</p>
-                                </div>
                             </div>
                         </a>
                     </div>
@@ -220,17 +228,67 @@
                   {% set continue = false %}
                   <div class="chat-log__item chat-log__item--own" style="background: #c3bd74; text-align: center;">
                     <h6>(botaniste certifié ✩✩✩✩)</h6>
-                    <div class="chat-log__item chat-log__item--own">
+                    <div class="chat-log__item chat-log__item--own" oncontextmenu="ClicDroitChat('overflybot{{ message.Id }}')">
+                      <div class="overlay" id="overflybot{{ message.Id }}" style="width: 10em; height: 0em; position: static; margin: 0.1em; color: #b9c7cf;">
+                        <div style="display: flex;">                      
+                          <a href="javascript:void(0)" onclick="messageeditor('overfly_em{{ message.Id }}','maskable_em{{ message.Id }}')" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;">🖉</a>
+                          <a href="{{ path('app_suiviplante_supprmessage', {id: planteselected.Id, message_id: message.Id}) }}" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;">🗑</a>
+                        </div>
+                      </div>
                       <h3 class="chat-log__author"> {{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
-                      <div class="chat-log__message">{{ message.contenu }}</div>
+                      {# formulaire edit message #}
+                      <div class="overlay" id="overfly_em{{ message.Id }}" style="width: 10em; height: 0em; position: static; margin: 0.1em; color: #b9c7cf;">
+                        <form action="{{ path('app_suiviplante_editmessage', {id: planteselected.Id, message_id: message.Id}) }}" method="post" class="form-horizontal">
+                          <div style="display: flex; flex-wrap: wrap;">
+                            <div style="flex: 100%;">
+                              <input type="text" class="form-control" name="infomessage" value="{{ message.contenu }}" />
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div style="flex: 100%; text-align: center;">
+                              <button class="btn btn-success btn-block">Modifier</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      {# fin du formulaire edit message #}
+                      <div class="chat-log__message" id="maskable_em{{ message.Id }}">{{ message.contenu }}</div>
                     </div>
                   </div>
                 {% endif %}
               {% endfor %}
               {% if continue %}
-                <div class="chat-log__item chat-log__item--own">
+                <div class="chat-log__item chat-log__item--own" oncontextmenu="ClicDroitChat('overfly{{ message.Id }}')">
+                  <div class="overlay" id="overfly{{ message.Id }}" style="width: 10em; height: 0em; position: static; margin: 0.1em; color: #b9c7cf;">
+                    <div style="display: flex;">                      
+                      <a href="javascript:void(0)" onclick="messageeditor('overfly_em{{ message.Id }}','maskable_em{{ message.Id }}')" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;">🖉</a>
+                      <a href="{{ path('app_suiviplante_supprmessage', {id: planteselected.Id, message_id: message.Id}) }}" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;">🗑</a>
+                    </div>
+                  </div>
                   <h3 class="chat-log__author"> {{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
-                  <div class="chat-log__message">{{ message.contenu }}</div>
+
+                  {# formulaire edit message #}
+                  <div class="overlay" id="overfly_em{{ message.Id }}" style="width: 10em; height: 0em; position: static; margin: 0.1em; color: #b9c7cf;">
+                    <form action="{{ path('app_suiviplante_editmessage', {id: planteselected.Id, message_id: message.Id}) }}" method="post" class="form-horizontal">
+                      <div style="display: flex; flex-wrap: wrap;">
+                        <div style="flex: 100%;">
+                          <input type="text" class="form-control" name="infomessage" value="{{ message.contenu }}" />
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <div style="flex: 100%; text-align: center;">
+                          <button class="btn btn-success btn-block">Modifier</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  {# fin du formulaire edit message #}
+
+                  <div class="chat-log__message" id="maskable_em{{ message.Id }}">{{ message.contenu }}</div>
                 </div>
               {% endif %}
 
@@ -265,42 +323,64 @@
 
 
     <script>
-
-
-
-        //effets des cartes
-        function overclickbrigth($byId) {
-            el=document.getElementById($byId);
-            el.style.borderColor = "hsla(60, 100%, 50%, 0.3)";
-            el.style.borderWidth = "6px";
-        }
-        function overflyingbrigth($byId) {
-            el=document.getElementById($byId);
-            el.style.borderColor = "hsla(120, 100%, 50%, 0.3)";
-            el.style.borderWidth = "3px";
-        }
-        function nooverflyingbrigth($byId) {
-            el=document.getElementById($byId);
-            el.style.borderColor = "rgba(0, 0, 0, 0.2)";
-            el.style.borderWidth = "1px";
-        }
-        
+   
         //clique droit overlays
-        function ClicDroitCarte(elementself) {
-            el=document.getElementById("DivContextuelCarte");
-            el.style.width = "20em";
-            el.dataset.idplante = elementself.dataset.idplante;
+
+        function ClicDroitChat(id) {
+            el=document.getElementById(id);
+            if(el.style.height != "0em")
+            {
+                el.style.height = "0em";
+            }
+            else
+            {
+                el.style.height = "2.1em";
+            }
+            
+        }
+        function getOffset(el) {
+          el = el.getBoundingClientRect();
+          return {
+            left: (el.left + window.scrollX -10 ) +'px',
+            top: (el.top + window.scrollY -10 ) +'px'
+          }
+        }
+        function ClicDroitImage(elementself,id) {
+            el=document.getElementById(id);
+            el.style.top = getOffset(elementself).top;
+            el.style.left = getOffset(elementself).left;
+            if(el.style.height != "0em")
+            {
+                el.style.height = "0em";
+            }
+            else
+            {
+                el.style.height = "auto";
+            }
+            
+        }
+        function closeNavImage(id) {
+            el=document.getElementById(id);
+            el.style.height = "0em";
         }
         function closeNav($idnav) {
             el=document.getElementById($idnav);
             el.style.width = "0em";
         }
-        function GetSupprPlanteId(){
-            el=document.getElementById("DivContextuelCarte");
-            elinput=document.getElementById("idplanteinput");
-            elinput.value = el.dataset.idplante;
+        function messageeditor(id, maskerid){
+            el=document.getElementById(id);
+            maskel=document.getElementById(maskerid);
+            if(el.style.height != "0em")
+            {
+                maskel.style.display = 'block';
+                el.style.height = "0em";
+            }
+            else
+            {
+                maskel.style.display = 'none';
+                el.style.height = "10.1em";
+            }
         }
-
         //clique sur bouton send message
         function PlanteSelectForm(elementself) {
             elinput=document.getElementById("planteselectinput");
