@@ -18,6 +18,10 @@ class MesPlantesController extends AbstractController
 {
 
     private $repository;
+    private $repository_photo;
+    private $repository_messages;
+    private $em;
+    private $security;
 
     public function __construct(PlanteRepository $planteRepository,  
         EntityManagerInterface $em, 
@@ -39,6 +43,7 @@ class MesPlantesController extends AbstractController
     #[Route('/user/mesplantes', name: 'app_mesplantes')]
     public function index(): Response
     {
+        /** @var User $user */
         $user = $this->security->getUser();
         if(!empty($user))
         {

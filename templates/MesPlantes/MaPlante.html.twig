@@ -147,11 +147,11 @@
             <div class="row d-flex flex-row flex-nowrap">
                 <div class="col-3" style="height: 18em; width: 9em; margin-right: 2em;">
                     <a href="{{ path('app_suiviplanteaddphoto', {id: planteselected.Id}) }}" style="text-decoration: none;">
-                        <div class="card" style="height: 17em; width: 9em;">
+                        <div class="card" style="height: 18em; width: 9em;">
                               <img src="{{ asset('build/img/icon-add.png') }}" alt="..." style=" 
                                   transform:scale(0.50);
                                   padding: 1em;
-                                  margin-top: 3.6em;
+                                  margin-top: 4.1em;
                                   "
                               >
                         </div>
@@ -300,13 +300,13 @@
       </br>
       <div class="chat-form">
         <div class="container ">
-          <form id="FormSelctPlante" action="{{ path('app_suiviplante_addmessage', {id: planteselected.id}) }}" method="post" class="form-horizontal">
+          <form id="FormSelctPlante" action="{{ path('app_suiviplante_addmessage', {id: planteselected.id}) }}" method="post" class="form-horizontal" onsubmit="buttonchat.disabled=true; return true;">
             <div style="display: flex;">
               <div style="flex: 90%; margin-right: 2em;">
-                <input type="text" class="form-control" name="infomessage" placeholder="Message" />
+                <input type="text" class="form-control" name="infomessage" placeholder="Message" required="true" />
               </div>
               <div style="flex: 10%;">
-                <button class="btn btn-success btn-block">Send</button>
+                <button class="btn btn-success btn-block" name="buttonchat">Send</button>
               </div>
             </div>
           </form>

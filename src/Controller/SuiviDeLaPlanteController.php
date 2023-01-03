@@ -22,7 +22,11 @@ class SuiviDeLaPlanteController extends AbstractController
 {
 
     private $repository;
-
+    private $repository_photo;
+    private $repository_messages;
+    private $em;
+    private $security;
+    
     public function __construct(PlanteRepository $planteRepository, 
         PhotoRepository $photoRepository, 
         MessageRepository $messageRepository,
