@@ -1,17 +1,46 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseLOGIN.html.twig' %}
 
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    
+    <br>
+    <div style="display:flex; flex-wrap: wrap;">
+        <div style="flex:70%;">
+            <a id="logo-cycloop1" class="logo-cycloop" href="{{ path('app_home') }}" style="text-decoration:none">
+                <img class="img-cycloop" src="{{ asset('build/img/logo-cycloop.png') }}">
+            </a>
+        </div>
+        <div style="flex:20%;">
+            <br>
+            <a class="label" href="{{ path('app_login') }}" style="text-decoration:none">
+                Connexion
+            </a>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="container" style="padding:4em;">
+        <div style="text-align:center;">
+            <h1>Inscription</h1>
+        </div>
+        <br>
+        <br>
+        {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.plainPassword, {
+                label: 'Password'
+            }) }}
+            <br>
+            <br>
+            {{ form_row(registrationForm.agreeTerms) }}
+            <br>
+            <br>
+            <br>
+            <div style="text-align:center;">
+                <button type="submit" class="btn btn-primary">S'inscrire</button>
+            </div>
+        {{ form_end(registrationForm) }}
+    </div>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
 {% endblock %}
