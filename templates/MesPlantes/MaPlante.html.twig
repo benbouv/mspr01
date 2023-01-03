@@ -1,0 +1,392 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ma Plante{% endblock %}
+
+{% block head %}
+    <style>
+      body {
+        font-family: 'Veranda', sans-serif;
+      }
+      span {
+        font-size: 22px;
+        cursor: pointer
+      }
+      .overlay {
+        height: 70%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        margin-top: 2%;
+        margin-bottom: 5%;
+        margin-left: 20%;
+        background-color: rgba(0, 0, 0, 0.75);
+        overflow-x: hidden;
+        transition: 0.5s;
+      }
+      .overlay-content {
+        position: relative;
+        top: 10%;
+        width: 100%;
+        text-align: center;
+        margin-top: 30px;
+      }
+      .overlay .formulaire {
+        padding: 10px;
+        text-decoration: none;
+        font-size: 32px;
+        color: #b9c7cf;
+        display: block;
+        transition: 0.4s;
+      }
+      .overlay a {
+        padding: 10px;
+        text-decoration: none;
+        font-size: 32px;
+        color: #b9c7cf;
+        display: block;
+        transition: 0.4s;
+      }
+      .overlay a:hover,
+      .overlay a:focus {
+        color: #eeeeee;
+      }
+      .overlay .close {
+        position: absolute;
+        top: 10px;
+        right: 35px;
+        font-size: 50px;
+      }
+      @media screen and (max-height: 450px) {
+        .overlay a {
+          font-size: 20px
+        }
+        .overlay .closed {
+          font-size: 40px;
+          top: 15px;
+          right: 35px;
+        }
+      }
+      .card-body {
+          min-height: 80px;
+          min-width: 260px;
+          text-align: center;
+      }
+
+      .testimonial-group > .row {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      .testimonial-group > .row > .col-4 {
+        display: inline-block;
+      }
+      .testimonial-group > .row > .card {
+        display: inline-block;
+      }
+
+
+
+
+      .chat-log {
+        padding: 40px 0 114px;
+        height: auto;
+        overflow: auto;
+      }
+      .chat-log__item {
+        background: #fafafa;
+        padding: 10px;
+        margin: 0 auto 20px;
+        max-width: 80%;
+        float: left;
+        border-radius: 4px;
+        box-shadow: 0 1px 2px rgba(0,0,0,.1);
+        clear: both;
+        text-align: left;
+      }
+
+      .chat-log__item.chat-log__item--own {
+        float: right;
+        background: #DCF8C6;
+        text-align: right;
+      }
+
+      .chat-form {
+        background: #DDDDDD;
+        padding: 40px 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+
+      .chat-log__author {
+        margin: 0 auto .5em;
+        font-size: 14px;
+        font-weight: bold;
+      }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+
+
+
+    <h1 class="display-6" style="text-align: center;">{{ planteselected.Nom }}</h1>
+
+    {% for infos in app.flashes('AddPhotoNonPermise') %}
+        <div class="alert alert-danger">
+            {{ infos }}
+        </div>
+    {% endfor %}
+
+
+
+    {# Carousel #}
+    <div id="carousell2">
+        <div class= "container testimonial-group">
+            <div class="row d-flex flex-row flex-nowrap">
+                <div class="col-3" style="height: 18em; width: 9em; margin-right: 2em;">
+                    <a href="{{ path('app_suiviplanteaddphoto', {id: planteselected.Id}) }}" style="text-decoration: none;">
+                        <div class="card" style="height: 18em; width: 9em;">
+                              <img src="{{ asset('build/img/icon-add.png') }}" alt="..." style=" 
+                                  transform:scale(0.50);
+                                  padding: 1em;
+                                  margin-top: 4.1em;
+                                  "
+                              >
+                        </div>
+                    </a>
+                </div>
+                {% for photo in photosdelaplante %}
+                    <div class="overlay" id="overflypho{{ photo.Id }}" style="
+                        width: auto; 
+                        height: 0em; 
+                        position: absolute;
+                        color: #b9c7cf;
+                        ">
+                        <a href="{{ path('app_suiviplante_supprphoto', {id: planteselected.Id, photo_id: photo.Id}) }}">🗑</a>
+                    </div>
+                    <div class="col-3" style="height: 19em; width: 18em; margin-right: 0.1em;">
+                        <a href="{{ asset('uploads/' ~ photo.name) }}" target="_blank" style="text-decoration: none; color:black;" oncontextmenu="ClicDroitImage(this,'overflypho{{ photo.Id }}')">
+                            <div class="card" style="height: 18em; width: 17em; text-align: center; padding: 0.2em;">
+                                <div class="card-title" style="height: 1em;">
+                                    <p>{{ photo.date|date('Y-m-d H:i') }}</p>
+                                </div>
+                                <div style="height: 15em;">
+                                    <img src="{{ asset('uploads/' ~ photo.name) }}" style="max-height: 15em; max-width: 16em;" class="card-img-top" alt="...">
+                                </div> 
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+    {% for infos in app.flashes('AddMessageNonPermis') %}
+        <div class="alert alert-danger">
+            {{ infos }}
+        </div>
+    {% endfor %}
+
+    
+    {# Chat #}
+    <div class="main">
+      <div class="container text-center col-8 ">
+        <div class="chat-log">
+          {% for message in messagess %}
+            {% if message.userWritingMessage != app.user  %}
+
+              {% set continue = true %}
+              {% for role in message.userWritingMessage.roles %}
+                {% if role == "ROLE_BOTANIST"  %}
+                  {% set continue = false %}
+                  <div class="chat-log__item" style="background: #c3bd74; text-align: center;">
+                    <h6>(botaniste certifié ✩✩✩✩)</h6>
+                    <div class="chat-log__item">
+                      <h3 class="chat-log__author">{{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
+                      <div class="chat-log__message">{{ message.contenu }}</div>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+              {% if continue %}
+                <div class="chat-log__item">
+                  <h3 class="chat-log__author">{{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
+                  <div class="chat-log__message">{{ message.contenu }}</div>
+                </div>
+              {% endif %}
+
+            {% else %}
+
+              {% set continue = true %}
+              {% for role in message.userWritingMessage.roles %}
+                {% if role == "ROLE_BOTANIST"  %}
+                  {% set continue = false %}
+                  <div class="chat-log__item chat-log__item--own" style="background: #c3bd74; text-align: center;">
+                    <h6>(botaniste certifié ✩✩✩✩)</h6>
+                    <div class="chat-log__item chat-log__item--own" oncontextmenu="ClicDroitChat('overflybot{{ message.Id }}')">
+                      <div class="overlay" id="overflybot{{ message.Id }}" style="width: 10em; height: 0em; position: static; margin: 0.1em; color: #b9c7cf;">
+                        <div style="display: flex;">                      
+                          <a href="javascript:void(0)" onclick="messageeditor('overfly_em{{ message.Id }}','maskable_em{{ message.Id }}')" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;">🖉</a>
+                          <a href="{{ path('app_suiviplante_supprmessage', {id: planteselected.Id, message_id: message.Id}) }}" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;">🗑</a>
+                        </div>
+                      </div>
+                      <h3 class="chat-log__author"> {{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
+                      {# formulaire edit message #}
+                      <div class="overlay" id="overfly_em{{ message.Id }}" style="width: 10em; height: 0em; position: static; margin: 0.1em; color: #b9c7cf;">
+                        <form action="{{ path('app_suiviplante_editmessage', {id: planteselected.Id, message_id: message.Id}) }}" method="post" class="form-horizontal">
+                          <div style="display: flex; flex-wrap: wrap;">
+                            <div style="flex: 100%;">
+                              <input type="text" class="form-control" name="infomessage" value="{{ message.contenu }}" />
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div style="flex: 100%; text-align: center;">
+                              <button class="btn btn-success btn-block">Modifier</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      {# fin du formulaire edit message #}
+                      <div class="chat-log__message" id="maskable_em{{ message.Id }}">{{ message.contenu }}</div>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+              {% if continue %}
+                <div class="chat-log__item chat-log__item--own" oncontextmenu="ClicDroitChat('overfly{{ message.Id }}')">
+                  <div class="overlay" id="overfly{{ message.Id }}" style="width: 10em; height: 0em; position: static; margin: 0.1em; color: #b9c7cf;">
+                    <div style="display: flex;">                      
+                      <a href="javascript:void(0)" onclick="messageeditor('overfly_em{{ message.Id }}','maskable_em{{ message.Id }}')" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;">🖉</a>
+                      <a href="{{ path('app_suiviplante_supprmessage', {id: planteselected.Id, message_id: message.Id}) }}" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;">🗑</a>
+                    </div>
+                  </div>
+                  <h3 class="chat-log__author"> {{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
+
+                  {# formulaire edit message #}
+                  <div class="overlay" id="overfly_em{{ message.Id }}" style="width: 10em; height: 0em; position: static; margin: 0.1em; color: #b9c7cf;">
+                    <form action="{{ path('app_suiviplante_editmessage', {id: planteselected.Id, message_id: message.Id}) }}" method="post" class="form-horizontal">
+                      <div style="display: flex; flex-wrap: wrap;">
+                        <div style="flex: 100%;">
+                          <input type="text" class="form-control" name="infomessage" value="{{ message.contenu }}" />
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <div style="flex: 100%; text-align: center;">
+                          <button class="btn btn-success btn-block">Modifier</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  {# fin du formulaire edit message #}
+
+                  <div class="chat-log__message" id="maskable_em{{ message.Id }}">{{ message.contenu }}</div>
+                </div>
+              {% endif %}
+
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      </br>
+      </br>
+      <div class="chat-form">
+        <div class="container ">
+          <form id="FormSelctPlante" action="{{ path('app_suiviplante_addmessage', {id: planteselected.id}) }}" method="post" class="form-horizontal" onsubmit="buttonchat.disabled=true; return true;">
+            <div style="display: flex;">
+              <div style="flex: 90%; margin-right: 2em;">
+                <input type="text" class="form-control" name="infomessage" placeholder="Message" required="true" />
+              </div>
+              <div style="flex: 10%;">
+                <button class="btn btn-success btn-block" name="buttonchat">Send</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        </br>
+      </div> 
+    </div>
+
+
+
+
+
+
+
+
+    <script>
+   
+        //clique droit overlays
+
+        function ClicDroitChat(id) {
+            el=document.getElementById(id);
+            if(el.style.height != "0em")
+            {
+                el.style.height = "0em";
+            }
+            else
+            {
+                el.style.height = "2.1em";
+            }
+            
+        }
+        function getOffset(el) {
+          el = el.getBoundingClientRect();
+          return {
+            left: (el.left + window.scrollX -10 ) +'px',
+            top: (el.top + window.scrollY -10 ) +'px'
+          }
+        }
+        function ClicDroitImage(elementself,id) {
+            el=document.getElementById(id);
+            el.style.top = getOffset(elementself).top;
+            el.style.left = getOffset(elementself).left;
+            if(el.style.height != "0em")
+            {
+                el.style.height = "0em";
+            }
+            else
+            {
+                el.style.height = "auto";
+            }
+            
+        }
+        function closeNavImage(id) {
+            el=document.getElementById(id);
+            el.style.height = "0em";
+        }
+        function closeNav($idnav) {
+            el=document.getElementById($idnav);
+            el.style.width = "0em";
+        }
+        function messageeditor(id, maskerid){
+            el=document.getElementById(id);
+            maskel=document.getElementById(maskerid);
+            if(el.style.height != "0em")
+            {
+                maskel.style.display = 'block';
+                el.style.height = "0em";
+            }
+            else
+            {
+                maskel.style.display = 'none';
+                el.style.height = "10.1em";
+            }
+        }
+        //clique sur bouton send message
+        function PlanteSelectForm(elementself) {
+            elinput=document.getElementById("planteselectinput");
+            elinput.value = elementself.dataset.idplante;
+            document.getElementById("FormSelctPlante").submit();
+        }
+
+    </script>
+{% endblock %}

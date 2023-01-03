@@ -26,3 +26,11 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+assets/controllers.json
+composer-setup.php
+composer.lock
+composer.phar
+symfony.lock
+assets/controllers.json
+composer.lock
+symfony.lock

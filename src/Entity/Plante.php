@@ -11,6 +11,18 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PlanteRepository::class)]
 class Plante
 {
+
+    const FAMILLELIST = [
+        0 => 'Je ne connais pas',
+        1 => 'Plante à fleur',
+        2 => 'Cactus',
+        3 => 'Herbacées',
+        4 => 'Arbres',
+        5 => 'Algues',
+        6 => 'Autre?'
+    ];
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -37,9 +49,16 @@ class Plante
     #[ORM\OneToMany(mappedBy: 'plantInformedByMessage', targetEntity: Message::class)]
     private Collection $messagesInformed;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Image = null;
+
+    #[ORM\OneToMany(mappedBy: 'PlantePossedePhoto', targetEntity: Photo::class, orphanRemoval: true)]
+    private Collection $photos;
+
     public function __construct()
     {
         $this->messagesInformed = new ArrayCollection();
+        $this->photos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,6 +162,48 @@ class Plante
             // set the owning side to null (unless already changed)
             if ($messagesInformed->getPlantInformedByMessage() === $this) {
                 $messagesInformed->setPlantInformedByMessage(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->Image;
+    }
+
+    public function setImage(?string $Image): self
+    {
+        $this->Image = $Image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Photo>
+     */
+    public function getPhotos(): Collection
+    {
+        return $this->photos;
+    }
+
+    public function addPhoto(Photo $photo): self
+    {
+        if (!$this->photos->contains($photo)) {
+            $this->photos->add($photo);
+            $photo->setPlantePossedePhoto($this);
+        }
+
+        return $this;
+    }
+
+    public function removePhoto(Photo $photo): self
+    {
+        if ($this->photos->removeElement($photo)) {
+            // set the owning side to null (unless already changed)
+            if ($photo->getPlantePossedePhoto() === $this) {
+                $photo->setPlantePossedePhoto(null);
             }
         }
 

@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Plante;
+use App\Entity\Photo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Plante>
+ * @extends ServiceEntityRepository<Photo>
  *
- * @method Plante|null find($id, $lockMode = null, $lockVersion = null)
- * @method Plante|null findOneBy(array $criteria, array $orderBy = null)
- * @method Plante[]    findAll()
- * @method Plante[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Photo|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Photo|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Photo[]    findAll()
+ * @method Photo[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PlanteRepository extends ServiceEntityRepository
+class PhotoRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Plante::class);
+        parent::__construct($registry, Photo::class);
     }
 
-    public function save(Plante $entity, bool $flush = false): void
+    public function save(Photo $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class PlanteRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Plante $entity, bool $flush = false): void
+    public function remove(Photo $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -39,38 +39,19 @@ class PlanteRepository extends ServiceEntityRepository
         }
     }
 
-    public function findById($idvalue)
-    {
-        return $this->createQueryBuilder('p')
-           ->andWhere('p.id = :val')
-           ->setParameter('val', $idvalue)
-           ->getQuery()
-           ->getResult()
-        ;
-    }
-
-    public function findAllById()
-    {
-        return $this->createQueryBuilder('p')
-           ->orderBy('p.id', 'DESC')
-           ->getQuery()
-           ->getResult()
-        ;
-    }
-
-    public function findByUserId($idvalue): array
+    public function findByPlanteId($idvalue): array
     {
          return $this->createQueryBuilder('p')
-            ->andWhere('p.userOwningPlant = :val')
+            ->andWhere('p.PlantePossedePhoto = :val')
             ->setParameter('val', $idvalue)
             ->getQuery()
             ->getResult()
          ;
     }
 
-
+    
 //    /**
-//     * @return Plante[] Returns an array of Plante objects
+//     * @return Photo[] Returns an array of Photo objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -84,7 +65,7 @@ class PlanteRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Plante
+//    public function findOneBySomeField($value): ?Photo
 //    {
 //        return $this->createQueryBuilder('p')
 //            ->andWhere('p.exampleField = :val')
