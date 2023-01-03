@@ -1,21 +1,65 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseLOGIN.html.twig' %}
 
 {% block body %}
     {% if error %}
         <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
+    {# ANCIEN CODE #}
+
+        {# <form action="{{ path('app_login') }}" method="post">
+            <label for="username">Email:</label>
+            <input type="text" id="username" name="_username" value="{{ last_username }}">
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="_password"> #}
+
+            {# <button type="submit">login</button>
+        </form>
+        <a href="{{ path('app_register') }}">Vous n'avez pas de compte ? Créez en un !</a> #}
+
+    {# ANCIEN CODE FIN#}
+
+            {# If you want to control the URL the user is redirected to on success
+            <input type="hidden" name="_target_path" value="/account"> #}
+
+
+
+    <br>
+    <a id="logo-cycloop1" class="logo-cycloop" href="{{ path('app_home') }}" style="text-decoration:none">
+        <img class="img-cycloop" src="{{ asset('build/img/logo-cycloop.png') }}">
+    </a>
+    <br>
+    <br>
+    <div class="container" style="text-align:center;">
+        <h1>Connection</h1>
+    </div>
+
+    <div class="container" style="padding:4em;">
     <form action="{{ path('app_login') }}" method="post">
-        <label for="username">Email:</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}">
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="_username" value="{{ last_username }}">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" name="_password">
+        </div>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="_password">
+        <input type="hidden" name="_target_path" value="{{ path('app_home') }}">
 
-        {# If you want to control the URL the user is redirected to on success
-        <input type="hidden" name="_target_path" value="/account"> #}
-
-        <button type="submit">login</button>
+        <br>
+        <br>
+        
+        <div style="text-align:center;">
+            <button type="submit" class="btn btn-primary">Connection</button>
+        </div>
     </form>
+
+    <br>
+    <br>
+    <br>
+
     <a href="{{ path('app_register') }}">Vous n'avez pas de compte ? Créez en un !</a>
+    </div>
 {% endblock %}
