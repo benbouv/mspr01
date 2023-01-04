@@ -1,5 +1,7 @@
 <nav class="header-menu">
 
+{# STYLE PRIVATE CSS #}
+
     <style>
         .on-the-fly-behavior {
             width: 14em; 
@@ -24,6 +26,10 @@
 
 
 
+
+
+{# NON CONNECTÉ #}
+
     {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
         <a id="logo-cycloop1" class="logo-cycloop" href="{{ path('app_home') }}" style="text-decoration:none; ">
             {# <img class="img-cycloop" src="{{ asset('build/img/logo-cycloop.png') }}" style="z-index:-1;"> #}
@@ -42,13 +48,19 @@
     {% endif %}
 
 
+
+{# CONNECTÉ #}
+
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        {# <img class="img-cycloop" src="{{ asset('build/img/logo-cycloop.png') }}" style="z-index:-1;"> #}
+
+
+
+        {# LA NAV BAR NATIVE #}
 
         <div style:"width: 13em;">     
             <div class="on-the-fly-behavior" style=" ">
                 <div class="left-group" style="">
-                    <button type="button" class="p-button-rounded" style=" cursor: pointer;">
+                    <button type="button" class="p-button-rounded" style=" cursor: pointer;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
                         <span class="p-button-label">...</span>
                     </button>
                 </div>
@@ -62,5 +74,44 @@
                 <span class="p-button-label">mon compte</span>
             </button>
         </div>
+
+
+
+        {# L'OVERLAY LATERAL GAUCHE #}
+
+        {# <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Enable both scrolling & backdrop</button> #}
+
+        <div class="offcanvas offcanvas-start" style="width:347px; background-color: rgba(0, 0, 0, 0.75); color: #b9c7cf;" data-bs-scroll="true" data-bs-config='{"backdrop":false}' tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop</h5>
+                <button type="button" class="btn-close btn-close-white" style="padding-right:5em;" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+
+                <p>Try scrolling the rest of the page to see this option in action.</p>
+                
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     {% endif %}
+
 </nav>
