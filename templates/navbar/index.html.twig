@@ -1,23 +1,66 @@
 <nav class="header-menu">
-    <a id="logo-cycloop1" class="logo-cycloop" href="{{ path('app_home') }}" style="text-decoration:none">
-        <img class="img-cycloop" src="{{ asset('build/img/logo-cycloop.png') }}">
-    </a>
-    <div class="right-group">
-        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+
+    <style>
+        .on-the-fly-behavior {
+            width: 14em; 
+            background-image: url('{{ asset('build/img/logo-cycloop.png') }}'); 
+            background-repeat: no-repeat;
+            background-size: 13em 7em;
+            background-position-x: 20%;
+            padding: 2em;
+            padding-left:1em;
+            
+        }
+
+        @media only screen and (max-width: 856px) {
+            .on-the-fly-behavior {
+                background-size: 9em 4.7em;
+                background-position-y: center;
+                padding-left:0.5em;
+                
+            }
+        }
+    </style>
+
+
+
+    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+        <a id="logo-cycloop1" class="logo-cycloop" href="{{ path('app_home') }}" style="text-decoration:none; ">
+            {# <img class="img-cycloop" src="{{ asset('build/img/logo-cycloop.png') }}" style="z-index:-1;"> #}
+            <div class="on-the-fly-behavior"  style="height:7em;">
+            
+            </div>
+        </a>
+        <div class="right-group">
             <a class="label" href="{{ path('app_login') }}" style="text-decoration:none">
                 Connexion
             </a>
             <a class="label" href="{{ path('app_register') }}" style="text-decoration:none">
                 Inscription
             </a>
-        {% endif %}
-        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        </div>
+    {% endif %}
+
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        {# <img class="img-cycloop" src="{{ asset('build/img/logo-cycloop.png') }}" style="z-index:-1;"> #}
+
+        <div style:"width: 13em;">     
+            <div class="on-the-fly-behavior" style=" ">
+                <div class="left-group" style="">
+                    <button type="button" class="p-button-rounded" style=" cursor: pointer;">
+                        <span class="p-button-label">...</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="right-group">
             <a class="label" href="{{ path('app_logout') }}" style="text-decoration:none">
                 Déconnexion
             </a>
             <button type="button" class="p-button-rounded" style="cursor: pointer;">
                 <span class="p-button-label">mon compte</span>
             </button>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
 </nav>

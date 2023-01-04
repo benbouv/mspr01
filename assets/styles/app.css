@@ -9,7 +9,7 @@ body {
 
 .header-menu {
     height: 120px;
-    background-color: #FFFFFF;
+    background-color: #ffffff00;
     border-bottom: 1px solid #222222aa;
     width: 100%;
     display: flex;
@@ -36,6 +36,13 @@ body {
     align-items: center;
 }
 
+.left-group {
+    margin-right: auto;
+    margin-left: 2%;
+    display: inline-flex;
+    align-items: center;
+}
+
 .label {
     font-family: Poppins;
     color: #030b1b;
@@ -50,7 +57,8 @@ body {
 }
 
 .p-button-rounded {
-    background-color: #002366;
+    background-color: #36770034;
+    border-color: #132b0071;
     width: 100%;
     font-family: Poppins;
     font-style: normal;
@@ -59,17 +67,17 @@ body {
     line-height: 40px;
     display: flex;
     align-items: center;
-    color: #FFFFFF;
+    color: #000b20;
     border-radius: 40px;
 }
 
 .p-button-rounded:hover {
-    background-color: #03e049;
-    border-color: #ffffff;
-    color: #000b20;
+    background-color: #aeff4448;
+    border-color: #0000003d;
+    color: #092000f3;
 }
 
-.search-box{
+/* .search-box{
     width: fit-content;
     height: fit-content;
     position: relative;
@@ -77,7 +85,7 @@ body {
     flex-direction: row-reverse;
     align-items: center;
     margin-right: 20px;
-}
+} */
 
 .input-search {
     height: 50px;
@@ -140,7 +148,7 @@ body {
 
     .header-menu {
         height: 75px;
-        background-color: #FFFFFF;
+        background-color: #ffffff00;
         border-bottom: 1px solid #3d3e3fbf;
         width: 100%;
         display: flex;
