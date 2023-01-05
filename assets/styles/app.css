@@ -5,6 +5,12 @@
 body {
     background-color: #FFFFFF;
     margin: 0;
+    font-family: 'Veranda', sans-serif;
+}
+
+span {
+    /* font-size: 22px; */
+    cursor: pointer
 }
 
 .header-menu {
@@ -69,6 +75,7 @@ body {
     align-items: center;
     color: #000b20;
     border-radius: 40px;
+    cursor: pointer;
 }
 
 .p-button-rounded:hover {
@@ -76,6 +83,32 @@ body {
     border-color: #0000003d;
     color: #092000f3;
 }
+
+.p-button-rounded-overlay {
+    background-color: #85a84ce3;
+    border-color: #2d6400;
+    color: #ced4c7;
+    justify-content: center;
+}
+
+.p-button-rounded-overlay:hover{
+    background-color: #97ac3d;
+    color: #ced4c7;
+}
+
+.p-button-rounded-overlay-close{
+    background-color: #d6b3b3;
+    height:2em; 
+    justify-content: flex-end; 
+    width:6em;
+}
+
+.p-button-rounded-overlay-close:hover{
+    background-color: #73ff00;
+
+}
+
+
 
 /* .search-box{
     width: fit-content;

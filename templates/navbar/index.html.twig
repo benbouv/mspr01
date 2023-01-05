@@ -4,7 +4,7 @@
 
     <style>
         .on-the-fly-behavior {
-            width: 14em; 
+            width: 13.5em; 
             background-image: url('{{ asset('build/img/logo-cycloop.png') }}'); 
             background-repeat: no-repeat;
             background-size: 13em 7em;
@@ -28,7 +28,7 @@
 
 
 
-{# NON CONNECTÉ #}
+{# SI NON CONNECTÉ #}
 
     {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
         <a id="logo-cycloop1" class="logo-cycloop" href="{{ path('app_home') }}" style="text-decoration:none; ">
@@ -49,18 +49,18 @@
 
 
 
-{# CONNECTÉ #}
+{# SI CONNECTÉ #}
 
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
 
 
-        {# LA NAV BAR NATIVE #}
+    {# LA NAV BAR NATIVE #}
 
         <div style:"width: 13em;">     
             <div class="on-the-fly-behavior" style=" ">
                 <div class="left-group" style="">
-                    <button type="button" class="p-button-rounded" style=" cursor: pointer;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
+                    <button type="button" class="p-button-rounded" style="" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
                         <span class="p-button-label">...</span>
                     </button>
                 </div>
@@ -70,27 +70,54 @@
             <a class="label" href="{{ path('app_logout') }}" style="text-decoration:none">
                 Déconnexion
             </a>
-            <button type="button" class="p-button-rounded" style="cursor: pointer;">
+            <button type="button" class="p-button-rounded" style="">
                 <span class="p-button-label">mon compte</span>
             </button>
         </div>
 
+    {# END #}
 
 
-        {# L'OVERLAY LATERAL GAUCHE #}
+    {# L'OVERLAY LATERAL GAUCHE #}
 
         {# <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Enable both scrolling & backdrop</button> #}
 
-        <div class="offcanvas offcanvas-start" style="width:347px; background-color: rgba(0, 0, 0, 0.75); color: #b9c7cf;" data-bs-scroll="true" data-bs-config='{"backdrop":false}' tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+        <div class="offcanvas offcanvas-start" style="width:332px; background-color: rgba(0, 0, 0, 0.75); color: #b9c7cf;" data-bs-scroll="true" data-bs-config='{"backdrop":false}' tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
 
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop</h5>
-                <button type="button" class="btn-close btn-close-white" style="padding-right:5em;" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Navigation</h5>
+                <button type="button" class="btn-close btn-close-white p-button-rounded p-button-rounded-overlay p-button-rounded-overlay-close" style="margin-top:0px;" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
 
-                <p>Try scrolling the rest of the page to see this option in action.</p>
-                
+                <p></p>
+                <br>
+                <a href="{{ path('app_mesplantes') }}" style="text-decoration:none;">
+                    <button type="button" class="p-button-rounded p-button-rounded-overlay" style="">
+                        <span class="p-button-label">Mes Plantes</span>
+                    </button>
+                </a>
+                <br>
+                <br>
+                <a href="{{ path('app_home') }}" style="text-decoration:none;">
+                    <button type="button" class="p-button-rounded p-button-rounded-overlay" style="">
+                        <span class="p-button-label">Gardiens disponibles</span>
+                    </button>
+                </a>
+                <br>
+                <br>
+                <a href="#" style="text-decoration:none;">
+                    <button type="button" class="p-button-rounded p-button-rounded-overlay" style="">
+                        <span class="p-button-label">Mon compte</span>
+                    </button>
+                </a>
+                <br>
+                <br>
+                <a href="#" style="text-decoration:none;">
+                    <button type="button" class="p-button-rounded p-button-rounded-overlay" style="">
+                        <span class="p-button-label">Parametres</span>
+                    </button>
+                </a>
             </div>
         </div>
 
