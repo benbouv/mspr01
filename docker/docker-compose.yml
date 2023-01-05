@@ -3,20 +3,16 @@ version: '3'
 services:
 ###> doctrine/doctrine-bundle ###
   database:
-    container_name: database
+    container_name: mysql
     image: mysql
     restart: always
     environment:
-      MYSQL_DATABASE: 'arosaje'
-      MYSQL_USER: 'root'
-      MYSQL_PASSWORD: 'root'
-      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
     ports:
-      - '3306:3307'
+      - 3306:3306
     volumes:
       - C:\Users\Benoit\docker-workspace\db-data:/var/lib/mysql
-    networks:
-      - mspr01_network
 
   db_manager:
     container_name: phpmyadmin
@@ -25,17 +21,13 @@ services:
       - 91:80
     environment:
       - PMA_HOST=database
-    networks:
-      - mspr01_network
 
   app:
-    image: php-mspr01
+    container_name: phpsymfony
+    image: phpsymfony
     ports:
-      - '8080:80'
+      - 8080:80
     environment:
-      DATABASE_URL: mysql://root:root@database:3307/arosaje
-    networks:
-      - mspr01_network
-
-networks:
-    mspr01_network:
+      DATABASE_URL: mysql://root:root@mysql:3306/arosaje
+    links:
+      - database

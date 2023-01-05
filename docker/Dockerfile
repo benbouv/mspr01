@@ -23,6 +23,4 @@ RUN chown -R www-data:www-data "/var/www/var/cache"
 
 WORKDIR /var/www/
 
-ENTRYPOINT [ "bash", "./docker/docker.sh" ]
-
-EXPOSE 80
+ENTRYPOINT [ "bash", "/var/www/docker/docker.sh" ]
