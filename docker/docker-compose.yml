@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+###> doctrine/doctrine-bundle ###
+  database:
+    container_name: mysql
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    ports:
+      - 3306:3306
+    volumes:
+      - C:\Users\Benoit\docker-workspace\db-data:/var/lib/mysql
+
+  db_manager:
+    container_name: phpmyadmin
+    image: phpmyadmin
+    ports:
+      - 91:80
+    environment:
+      - PMA_HOST=database
+
+  app:
+    container_name: phpsymfony
+    image: phpsymfony
+    ports:
+      - 8080:80
+    environment:
+      DATABASE_URL: mysql://root:root@mysql:3306/arosaje
+    links:
+      - database
