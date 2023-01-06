@@ -1,23 +1,144 @@
 <nav class="header-menu">
-    <a id="logo-cycloop1" class="logo-cycloop" href="{{ path('app_home') }}" style="text-decoration:none">
-        <img class="img-cycloop" src="{{ asset('build/img/logo-cycloop.png') }}">
-    </a>
-    <div class="right-group">
-        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+
+{# STYLE PRIVATE CSS #}
+
+    <style>
+        .on-the-fly-behavior {
+            width: 13.5em; 
+            background-image: url('{{ asset('build/img/logo-cycloop.png') }}'); 
+            background-repeat: no-repeat;
+            background-size: 13em 7em;
+            background-position-x: 20%;
+            padding: 2em;
+            padding-left:1em;
+            
+        }
+
+        @media only screen and (max-width: 856px) {
+            .on-the-fly-behavior {
+                background-size: 9em 4.7em;
+                background-position-y: center;
+                padding-left:0.5em;
+                
+            }
+        }
+    </style>
+
+
+
+
+
+{# SI NON CONNECTÉ #}
+
+    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+        <a id="logo-cycloop1" class="logo-cycloop" href="{{ path('app_home') }}" style="text-decoration:none; ">
+            {# <img class="img-cycloop" src="{{ asset('build/img/logo-cycloop.png') }}" style="z-index:-1;"> #}
+            <div class="on-the-fly-behavior"  style="height:7em;">
+            
+            </div>
+        </a>
+        <div class="right-group">
             <a class="label" href="{{ path('app_login') }}" style="text-decoration:none">
                 Connexion
             </a>
             <a class="label" href="{{ path('app_register') }}" style="text-decoration:none">
                 Inscription
             </a>
-        {% endif %}
-        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        </div>
+    {% endif %}
+
+
+
+{# SI CONNECTÉ #}
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+
+
+    {# LA NAV BAR NATIVE #}
+
+        <div style:"width: 13em;">     
+            <div class="on-the-fly-behavior" style=" ">
+                <div class="left-group" style="">
+                    <button type="button" class="p-button-rounded" style="" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
+                        <span class="p-button-label">...</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="right-group">
             <a class="label" href="{{ path('app_logout') }}" style="text-decoration:none">
                 Déconnexion
             </a>
-            <button type="button" class="p-button-rounded" style="cursor: pointer;">
+            <button type="button" class="p-button-rounded" style="">
                 <span class="p-button-label">mon compte</span>
             </button>
-        {% endif %}
-    </div>
+        </div>
+
+    {# END #}
+
+
+    {# L'OVERLAY LATERAL GAUCHE #}
+
+        {# <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Enable both scrolling & backdrop</button> #}
+
+        <div class="offcanvas offcanvas-start" style="width:332px; background-color: rgba(0, 0, 0, 0.75); color: #b9c7cf;" data-bs-scroll="true" data-bs-config='{"backdrop":false}' tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Navigation</h5>
+                <button type="button" class="btn-close btn-close-white p-button-rounded p-button-rounded-overlay p-button-rounded-overlay-close" style="margin-top:0px;" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+
+                <p></p>
+                <br>
+                <a href="{{ path('app_mesplantes') }}" style="text-decoration:none;">
+                    <button type="button" class="p-button-rounded p-button-rounded-overlay" style="">
+                        <span class="p-button-label">Mes Plantes</span>
+                    </button>
+                </a>
+                <br>
+                <br>
+                <a href="{{ path('app_home') }}" style="text-decoration:none;">
+                    <button type="button" class="p-button-rounded p-button-rounded-overlay" style="">
+                        <span class="p-button-label">Gardiens disponibles</span>
+                    </button>
+                </a>
+                <br>
+                <br>
+                <a href="{{ path('app_moncompte') }}" style="text-decoration:none;">
+                    <button type="button" class="p-button-rounded p-button-rounded-overlay" style="">
+                        <span class="p-button-label">Mon compte</span>
+                    </button>
+                </a>
+                <br>
+                <br>
+                <a href="#" style="text-decoration:none;">
+                    <button type="button" class="p-button-rounded p-button-rounded-overlay" style="">
+                        <span class="p-button-label">Parametres</span>
+                    </button>
+                </a>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {% endif %}
+
 </nav>

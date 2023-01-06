@@ -4,13 +4,7 @@
 
 {% block head %}
     <style>
-      body {
-        font-family: 'Veranda', sans-serif;
-      }
-      span {
-        font-size: 22px;
-        cursor: pointer
-      }
+
       .overlay {
         height: 70%;
         width: 0;
@@ -78,7 +72,7 @@
       <a href="javascript:void(0)" class="closed" onclick="closeNav('navoverlay')" style="position: absolute; left: 260px">&times;</a>
       <div class="overlay-content">
         <div class="formulaire">
-          <form action="/user/mesplantes/form" method="post">
+          <form action="{{ path('app_mesplantesform') }}" method="post">
             <div class="mb-3">
               <h2>Nouvelle plante</h2>
               <br/>
@@ -125,7 +119,7 @@
 
 
     {# Tableau des cartes de plantes disponibles #}
-    <div style="margin-left: 2.5em">
+    <div style="padding-left: 2.5em">
         <h1>Vos dernières plantes ({{ app.user.email }})</h1>
         <div>
             <small>- Pour supprimer ou modifier : faite Click-droit.</small>
@@ -138,11 +132,11 @@
         <div class="row flex">
             <div class="col-3" style="height: 15em; width: 9em">
                 <span onclick="openNav()">
-                    <div class="card" id="overflybb" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style="height: 8.7em; text-align: center;">
+                    <div class="card" id="overflybb" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style="height: 12em; text-align: center;">
                         <img src="{{ asset('build/img/icon-add.png') }}" alt="..." style=" 
                             transform:scale(0.75);
                             padding: 1em;
-                            margin-top: 1.6em;"
+                            margin-top: 1.9em;"
                         >
                     </div>
                 </span>
