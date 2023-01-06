@@ -6,9 +6,10 @@ C:\Users\Benoit\workspace\symfony-mspr01\docker>docker-compose up -d
 
 - Then access inside the phpsymfony container bash :
 docker exec -it phpsymfony bash
+php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 exit
 
-- Create a user from the symfony web interface with some email = 'admin@hotmail.fr' and password='adminpwd'
-- Then in phpmyadmin web interface update this created user to upgrade his role to Admin :
+- Create a user from the symfony web interface (on the localhost:8080) with some email = 'admin@hotmail.fr' and password='adminpwd'
+- Then in phpmyadmin web interface (on the localhost:91) update this created user to upgrade his role to Admin :
 UPDATE USER SET roles = JSON_ARRAY('ROLE_ADMIN', 'ROLE_USER') WHERE email = 'admin@hotmail.fr'
