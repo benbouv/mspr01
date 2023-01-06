@@ -1,11 +1,14 @@
 - Build the image for symfony application
 C:\Users\Benoit\workspace\symfony-mspr01>docker build -t phpsymfony . -f ./docker/Dockerfile
 - Run docker compose to run symfony app, mysql database and phpmyadmin
+cd docker
 C:\Users\Benoit\workspace\symfony-mspr01\docker>docker-compose up -d
 
-- Then inside the phpsymfony container bash : 
+- Then access inside the phpsymfony container bash :
+docker exec -it phpsymfony bash
 php bin/console doctrine:migrations:migrate
+exit
 
 - Create a user from the symfony web interface with some email = 'admin@hotmail.fr' and password='adminpwd'
-- Then in phpmyadmin web interface update this created user to upgrade his role :
+- Then in phpmyadmin web interface update this created user to upgrade his role to Admin :
 UPDATE USER SET roles = JSON_ARRAY('ROLE_ADMIN', 'ROLE_USER') WHERE email = 'admin@hotmail.fr'
