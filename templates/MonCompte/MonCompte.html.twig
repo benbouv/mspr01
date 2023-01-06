@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Compte{% endblock %}
+
+{% block head %}
+    <style>
+
+      @media screen and (max-height: 450px) {
+      }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+
+
+    {# Corps #}
+    <div style="padding-left: 2.5em">
+        <h1>{{ app.user.email }}</h1>
+        <div>
+            <small>- Pour supprimer ou modifier : faite Click-droit.</small>
+            </br>
+            <small>- Appuyer sur l'icon "+" pour ajouter une plante.</small>
+        </div>
+        </br>
+        </br>
+    </div>
+
+
+
+
+
+    <script>
+    </script>
+{% endblock %}
