@@ -257,6 +257,11 @@ class SuiviDeLaPlanteController extends AbstractController
     }
 
 
+
+
+
+    
+
     //user is allowed if gardien ou proprio de la plante
     private function UserIsPlanteAllowed($user,$plante): bool
     {
