@@ -75,28 +75,34 @@ class MonCompteController extends AbstractController
         $user = $this->security->getUser();
         if(!empty($user))
         {
-            if($_POST['infoEmail']!==null || $_POST['infoEmail']!==$user->getEmail())
+            if($_POST['infoEmail']!==null && $_POST['infoEmail']!=="" && $_POST['infoEmail']!==$user->getEmail())
             {
                 $user->setEmail($_POST['infoEmail']);
             }
-            if($_POST['infoNom']!==null || $_POST['infoNom']!==$user->getNom())
+            if($_POST['infoNom']!==null && $_POST['infoNom']!=="" && $_POST['infoNom']!==$user->getNom())
             {
                 $user->setNom($_POST['infoNom']);
             }
-            if($_POST['infoTel']!==null || $_POST['infoTel']!==$user->getTelephone())
+            if($_POST['infoTel']!==null && $_POST['infoTel']!=="" && $_POST['infoTel']!==$user->getTelephone())
             {
                 $user->setTelephone($_POST['infoTel']);
             }
-            if($_POST['infoPseudo']!==null || $_POST['infoPseudo']!==$user->getPseudo())
+            if($_POST['infoPseudo']!==null && $_POST['infoPseudo']!=="" && $_POST['infoPseudo']!==$user->getPseudo())
             {
                 $user->setPseudo($_POST['infoPseudo']);
             }
 
-            if ($_POST['infoPass']===$_POST['infoPassVerif'])
+            if($_POST['infoPass']!==null && $_POST['infoPass']!=="")
             {
-                $user->setPassword(
-                    $userPasswordHasherInterface->hashPassword($user, $_POST['infoPass'])
-                );
+                if($_POST['infoPassVerif']!==null && $_POST['infoPassVerif']!=="")
+                {
+                    if ($_POST['infoPass']===$_POST['infoPassVerif'])
+                    {
+                        $user->setPassword(
+                            $userPasswordHasherInterface->hashPassword($user, $_POST['infoPass'])
+                        );
+                    }
+                }
             }
 
 

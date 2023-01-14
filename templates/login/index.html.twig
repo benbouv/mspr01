@@ -35,13 +35,13 @@
         <h1>Connection</h1>
     </div>
 
-    <div class="container" style="padding:4em;">
-    <form action="{{ path('app_login') }}" method="post">
-        <div class="mb-3">
+    <div class="container" style="padding:4em; max-width:500px;">
+    <form action="{{ path('app_login') }}" method="post" style="">
+        <div class="mb-3" style="">
             <label for="exampleInputEmail1" class="form-label">Email address</label>
             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="_username" value="{{ last_username }}">
         </div>
-        <div class="mb-3">
+        <div class="mb-3" style="">
             <label for="exampleInputPassword1" class="form-label">Password</label>
             <input type="password" class="form-control" id="exampleInputPassword1" name="_password">
         </div>
@@ -50,12 +50,14 @@
 
         <br>
         <br>
+        <br>
         
         <div style="text-align:center;">
             <button type="submit" class="btn btn-primary">Connection</button>
         </div>
     </form>
 
+    <br>
     <br>
     <br>
     <br>
