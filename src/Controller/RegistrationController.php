@@ -22,6 +22,14 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if(!filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL))
+            {
+                $this->addFlash('EmailNonValide','Email non valide.');
+                return $this->redirectToRoute('app_register');
+            }
+
+
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(

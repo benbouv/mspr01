@@ -14,6 +14,22 @@
 {% block body %}
 
 
+
+
+{% for infos in app.flashes('EmailNonValide') %}
+    <div class="alert alert-danger">
+        {{ infos }}
+    </div>
+{% endfor %}
+{% for infos in app.flashes('TelNonValide') %}
+    <div class="alert alert-danger">
+        {{ infos }}
+    </div>
+{% endfor %}
+
+
+
+
     {# Corps #}
 
     <div style="text-align:center;">

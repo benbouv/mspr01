@@ -4,6 +4,12 @@
 
 {% block body %}
     
+    {% for infos in app.flashes('EmailNonValide') %}
+    <div class="alert alert-danger">
+        {{ infos }}
+    </div>
+    {% endfor %}
+
     <br>
     <div style="display:flex; flex-wrap: wrap;">
         <div style="flex:70%;">
