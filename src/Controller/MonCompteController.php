@@ -57,7 +57,31 @@ class MonCompteController extends AbstractController
         {
             $userId = $user->getId();
 
+            $roles = $user->getRoles();
+
+            //Is gardien?
+            $isgardien = false;
+            foreach($roles as $role){
+                if($role==="ROLE_GARDIEN")
+                {
+                    $isgardien = true;
+                    break;
+                }
+            }
+
+            //Is botanist?
+            $isbotanist = false;
+            foreach($roles as $role){
+                if($role==="ROLE_BOTANIST")
+                {
+                    $isbotanist = true;
+                    break;
+                }
+            }
+
             return $this->render('MonCompte/MonCompte.html.twig', [
+                'IsGardien' => $isgardien,
+                'IsBotanist' => $isbotanist
 
             ]);
         }
@@ -114,25 +138,26 @@ class MonCompteController extends AbstractController
     }
 
 
-    // SET GARDIEN OR NOT \\
-    #[Route('/user/MonCompte/setgard', name: 'app_moncompte_setgard')]
-    public function comptesetgard()
+    // SET OPTIONS \\
+    #[Route('/user/MonCompte/setoptions', name: 'app_moncompte_setoptions')]
+    public function comptesetoptions()
     {
         /** @var User $user */
         $user = $this->security->getUser();
         $roles = $user->getRoles();
+
         //Is gardien?
-            if ($_POST['infoIsGardien']){
+            if (isset($_POST['setIsGardien'])){
                 foreach($roles as $role){
                     if($role==="ROLE_GARDIEN")
                     {
-                        break;
+                        break 1;
                     }
                     if( !next( $roles ) ) 
                     {
                         array_push($roles,"ROLE_GARDIEN");
                         $user->setRoles($roles);
-                        break; 
+                        break 1; 
                     }
                 }
             }
@@ -143,36 +168,24 @@ class MonCompteController extends AbstractController
                     {
                         unset($roles[$key]);
                         $user->setRoles($roles);
-                        break; 
+                        break 1; 
                     }
                 }
             }
         //end
 
-        $this->repository_user->save($user,true);
-
-        return $this->redirectToRoute('app_moncompte');
-    }
-
-    // SET BOTANIST OR NOT \\
-    #[Route('/user/MonCompte/setbota', name: 'app_moncompte_setbota')]
-    public function comptesetbota()
-    {
-        /** @var User $user */
-        $user = $this->security->getUser();
-        $roles = $user->getRoles();
         //Is botanist?
-            if ($_POST['infoIsBotanist']){
+            if (isset($_POST['setIsBotanist'])){
                 foreach($roles as $role){
                     if($role==="ROLE_BOTANIST")
                     {
-                        break;
+                        break 1;
                     }
                     if( !next( $roles ) ) 
                     {
                         array_push($roles,"ROLE_BOTANIST");
                         $user->setRoles($roles);
-                        break; 
+                        break 1; 
                     }
                 }
             }
@@ -183,7 +196,7 @@ class MonCompteController extends AbstractController
                     {
                         unset($roles[$key]);
                         $user->setRoles($roles);
-                        break; 
+                        break 1; 
                     }
                 }
             }
@@ -193,6 +206,7 @@ class MonCompteController extends AbstractController
 
         return $this->redirectToRoute('app_moncompte');
     }
+
 
 
 }

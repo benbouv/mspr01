@@ -72,9 +72,9 @@
                     </div>
                     <br>
                     <div style="margin-left:3em; text-align:left;">
-                        <small>Nombre de plantes : 5</small>
-                        <small>Nombre de gardes : 1</small>
-                        <small>Nombre de demandes : 1</small>
+                        <small>Nombre de plantes : x</small>
+                        <small>Nombre de gardes : x</small>
+                        <small>Nombre de demandes : x</small>
                     </div>
                 </div>
             </div>
@@ -89,32 +89,39 @@
         </div>
         <div style=" display:flex;  flex-direction: column; justify-content:center; margin:2em;">
             <div style=" display:flex; justify-content: center;">
-                <div style="text-align:left; width: 220px">
+                <form action="{{ path('app_moncompte_setoptions') }}" method="post" style="text-align:left; width: 220px">
                     <div class="form-switch">
-                        <input class="form-check-input" name="infoIsGardien" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                        <label class="form-check-label" for="flexSwitchCheckDefault">Garder des plantes?</label>
+                        {% if IsGardien == true %}
+                            <input class="form-check-input" name="setIsGardien" type="checkbox" role="switch" id="flexSwitchCheckDefault1" checked>
+                        {% else %}
+                            <input class="form-check-input" name="setIsGardien" type="checkbox" role="switch" id="flexSwitchCheckDefault1">
+                        {% endif %}
+                        <label class="form-check-label" for="flexSwitchCheckDefault1">Garder des plantes?</label>
                     </div>
                     </br>
                     <div class="form-switch">
-                        <input class="form-check-input" name="infoIsBotanist" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                        <label class="form-check-label" for="flexSwitchCheckDefault">Botaniste? [non permis]</label>
+                        {% if IsBotanist == true %}
+                            <input class="form-check-input" name="setIsBotanist" type="checkbox" role="switch" id="flexSwitchCheckDefault2" checked>
+                        {% else %}
+                            <input class="form-check-input" name="setIsBotanist" type="checkbox" role="switch" id="flexSwitchCheckDefault2">
+                        {% endif %}
+
+                        <label class="form-check-label" for="flexSwitchCheckDefault2">Botaniste? [non permis]</label>
                     </div>
                     </br>
-                    <div class="form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                        <label class="form-check-label" for="flexSwitchCheckDefault">Géolocalisation?</label>
-                    </div>
                     <br>
-                    <br>
-                </div>
+                    <button type="submit" class="btn btn-secondary" style="background-color:#f5f7f2; color:black; width: 100%;">Appliquer les options</button>
+                </form>
             </div>
 
             <div class="mb-3">
+                <br>
                 <h1>...</h1>
+                <br>
             </div>
 
             <div>
-                <button type="button" class="btn btn-danger">SUPPRIMER MON COMPTE</button>
+                <button type="button" class="btn btn-danger">SUPPRIMER MON COMPTE <br> (pas encore disponible)</button>
             </div>
             <br>
             <br>
