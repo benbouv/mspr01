@@ -200,7 +200,7 @@
                   <div class="chat-log__item" style="background: #c3bd74; text-align: center;">
                     <h6>(botaniste certifié ✩✩✩✩)</h6>
                     <div class="chat-log__item">
-                      <h3 class="chat-log__author">{{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
+                      <h3 class="chat-log__author">{{ message.userWritingMessage.pseudo }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
                       <div class="chat-log__message">{{ message.contenu }}</div>
                     </div>
                   </div>
@@ -208,7 +208,7 @@
               {% endfor %}
               {% if continue %}
                 <div class="chat-log__item">
-                  <h3 class="chat-log__author">{{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
+                  <h3 class="chat-log__author">{{ message.userWritingMessage.pseudo }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
                   <div class="chat-log__message">{{ message.contenu }}</div>
                 </div>
               {% endif %}
@@ -228,7 +228,7 @@
                           <a href="{{ path('app_suiviplante_supprmessage', {id: planteselected.Id, message_id: message.Id}) }}" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;">🗑</a>
                         </div>
                       </div>
-                      <h3 class="chat-log__author"> {{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
+                      <h3 class="chat-log__author"> {{ message.userWritingMessage.pseudo }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
                       {# formulaire edit message #}
                       <div class="overlay" id="overfly_em{{ message.Id }}" style="width: 10em; height: 0em; position: static; margin: 0.1em; color: #b9c7cf;">
                         <form action="{{ path('app_suiviplante_editmessage', {id: planteselected.Id, message_id: message.Id}) }}" method="post" class="form-horizontal">
@@ -260,7 +260,7 @@
                       <a href="{{ path('app_suiviplante_supprmessage', {id: planteselected.Id, message_id: message.Id}) }}" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;">🗑</a>
                     </div>
                   </div>
-                  <h3 class="chat-log__author"> {{ message.userWritingMessage.email }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
+                  <h3 class="chat-log__author"> {{ message.userWritingMessage.pseudo }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
 
                   {# formulaire edit message #}
                   <div class="overlay" id="overfly_em{{ message.Id }}" style="width: 10em; height: 0em; position: static; margin: 0.1em; color: #b9c7cf;">
