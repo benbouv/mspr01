@@ -56,8 +56,11 @@
         <script>
             tab = [];
             let dist = 0;
-            var geolng = 1.0;
-            var geolat = 1.0;
+            let point1 = 0;
+            let point2 = 0;
+            let geolng = 1.0;
+            let geolat = 1.0;
+
             var map = L.map('map').setView([48.833, 2.333], 7);
             map.on('locationfound', function(e) {
                 geolat = e.latlng.lat;
@@ -73,25 +76,34 @@
         {% for user in users %}
             <tr>
                 <script>
-                    {# {% if user.lat != null %}
-                        d00 = {{user.lat}};
-                        d01 = {{user.lng}};
-                        d0 = radians( {{user.lat}} );
-                        d1 = Math.cos(d0);
-                        d2 = Math.cos(radians(geolat)) * Math.cos(radians( {{user.lng}} ) - radians(geolng));
-                        d3 = Math.sin(radians( {{user.lat}} )) * Math.sin(radians(geolat));
-                        d4 = Math.acos(d1 * d2 + d3 );
+                    {% if user.lat != null and user.lng != null  %}
+                        {# {% for role in user.roles %}
+                            {% if role == "ROLE_GARDIEN" %}
+                                ulat = {{user.lat}};
+                                ulng = {{user.lng}};
+                                {#
+                                d0 = radians( {{user.lat}} );
+                                d1 = Math.cos(d0);
+                                d2 = Math.cos(radians(geolat)) * Math.cos(radians( {{user.lng}} - geolng));
+                                d3 = Math.sin(radians( {{user.lat}} )) * Math.sin(radians(geolat));
+                                d4 = Math.acos(d1 * d2 + d3 );
 
-                        dist = (6371 * d4); #}
-                        //{# Le Calcule ne marche pas, il donne des resultats ridicules #}
-                        //if(dist<70){
-                        //    tab.push({'title':'{{user.email}}','lat':'{{user.lat}}','lng':'{{user.lng}}'});
-                        //}
-                    {# {% endif %} #}
+                                dist = (6371 * d4); #}
+                                {# point1 = L.latLng( ulat, ulng);
+                                point2 = L.latLng( geolat, geolng);
+                                dist = ((point2.distanceTo(point1))/1000).toFixed(3); #}
+                                {# if(dist<4){ #}
+                                    tab.push({'title':'{{user.email}}','lat':'{{user.lat}}','lng':'{{user.lng}}'});
+                                {# } #}
+                            {# {% endif %}
+                        {% endfor %} #}
+                    {% endif %}
                     
-                    tab.push({'title':'{{user.email}}','lat':'{{user.lat}}','lng':'{{user.lng}}'});
+                    //tab.push({'title':'{{user.email}}','lat':'{{user.lat}}','lng':'{{user.lng}}'});
                     
                 </script>
+
+
                 <td>{{user.email}}</td>
                 <td>
                     {% for role in user.roles %}
@@ -104,6 +116,7 @@
                     </a>
                 </td>
             </tr>
+
         {% endfor %}
     </tbody>
 </table>

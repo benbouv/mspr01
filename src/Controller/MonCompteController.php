@@ -101,7 +101,14 @@ class MonCompteController extends AbstractController
         {
             if($_POST['infoEmail']!==null && $_POST['infoEmail']!=="" && $_POST['infoEmail']!==$user->getEmail())
             {
-                $user->setEmail($_POST['infoEmail']);
+                if(filter_var($_POST['infoEmail'], FILTER_VALIDATE_EMAIL))
+                {
+                    $user->setEmail($_POST['infoEmail']);
+                }
+                else
+                {
+                    $this->addFlash('EmailNonValide','Email non valide.');
+                }
             }
             if($_POST['infoNom']!==null && $_POST['infoNom']!=="" && $_POST['infoNom']!==$user->getNom())
             {
@@ -109,7 +116,14 @@ class MonCompteController extends AbstractController
             }
             if($_POST['infoTel']!==null && $_POST['infoTel']!=="" && $_POST['infoTel']!==$user->getTelephone())
             {
-                $user->setTelephone($_POST['infoTel']);
+                if (preg_match('/^[0-9]{10}+$/', $_POST['infoTel'])) 
+                {
+                    $user->setTelephone($_POST['infoTel']);
+                }
+                else
+                {
+                    $this->addFlash('TelNonValide','n° de téléphone non valide.');
+                }
             }
             if($_POST['infoPseudo']!==null && $_POST['infoPseudo']!=="" && $_POST['infoPseudo']!==$user->getPseudo())
             {
