@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes demandes{% endblock %}
+
+{% block head %}
+    <style>
+
+      .overlay {
+        height: 70%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        margin-top: 2%;
+        margin-bottom: 5%;
+        margin-left: 20%;
+        background-color: rgba(0, 0, 0, 0.75);
+        overflow-x: hidden;
+        transition: 0.5s;
+        border-radius: 15px;
+      }
+      .overlay-content {
+        position: relative;
+        top: 10%;
+        width: 100%;
+        text-align: center;
+        margin-top: 30px;
+      }
+      .overlay .formulaire {
+        padding: 10px;
+        text-decoration: none;
+        font-size: 32px;
+        color: #b9c7cf;
+        display: block;
+        transition: 0.4s;
+      }
+      .overlay a {
+        padding: 10px;
+        text-decoration: none;
+        font-size: 32px;
+        color: #b9c7cf;
+        display: block;
+        transition: 0.4s;
+      }
+      .overlay a:hover,
+      .overlay a:focus {
+        color: #eeeeee;
+      }
+      .overlay .close {
+        position: absolute;
+        top: 10px;
+        right: 35px;
+        font-size: 50px;
+      }
+      @media screen and (max-height: 450px) {
+        .overlay a {
+          font-size: 20px
+        }
+        .overlay .closed {
+          font-size: 40px;
+          top: 15px;
+          right: 35px;
+        }
+      }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+
+
+
+
+
+
+
+    {# Tableau des cartes de plantes disponibles #}
+    <div style="padding-left: 2.5em">
+        <h1>Demandes reçues</h1>
+        </br>
+        </br>
+        
+        {# Demandes Possedees #}
+        <div class="row flex">
+            {% for demande in demandesrecus %}
+                <div class="col-3" style="height: 15em; width: 9em">
+                    <a href="{{ path('app_profilpage', {id: demande.UserFaitDemande.Id}) }}" style="text-decoration: none;">
+                        <div class="card" id="overfly{{ demande.PlanteContientDemande.Id }}" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style=
+                            "
+                            padding: 0.2em;
+                            height: 14em; 
+                            color: black;
+                            ">
+                            <div style="height: 4em;">
+                                {% if demande.PlanteContientDemande.image == null %}
+                                    <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" style="max-height: 4em; max-width: 7em;" alt="...">
+                                {% else %}
+                                    <img src="{{ asset('uploads/' ~ demande.PlanteContientDemande.image) }}" class="card-img-top" style="max-height: 4em; max-width: 7em;" alt="...">  
+                                {% endif %}
+                            </div>
+                            <div class="card-title">
+                                <h4  style="text-align: center;">{{ demande.PlanteContientDemande.Nom }}</h4>
+                                <h4  style="text-align: center;">{{ demande.UserFaitDemande.Pseudo }}</h4>
+                                <small>{{ demande.DateDeCreation|date('Y-m-d H:i') }}</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}   
+        </div>
+
+
+        </br>
+        </br>
+        <h1>Demandes envoyées</h1>
+        </br>
+        </br>
+
+        {# Demande envoyer #}
+        <div class="row flex">
+            {% for demande in demandesenvoyers %}
+                <div class="col-3" style="height: 15em; width: 9em">
+                    <a href="{{ path('app_profilpage', {id: demande.UserFaitDemande.Id}) }}" style="text-decoration: none;">
+                        <div class="card" id="overfly{{ demande.PlanteContientDemande.Id }}" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style=
+                            "
+                            padding: 0.2em;
+                            height: 14em; 
+                            color: black;
+                            ">
+                            <div style="height: 4em;">
+                                {% if demande.PlanteContientDemande.image == null %}
+                                    <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" style="max-height: 4em; max-width: 7em;" alt="...">
+                                {% else %}
+                                    <img src="{{ asset('uploads/' ~ demande.PlanteContientDemande.image) }}" class="card-img-top" style="max-height: 4em; max-width: 7em;" alt="...">  
+                                {% endif %}
+                            </div>
+                            <div class="card-title">
+                                <h4  style="text-align: center;">{{ demande.PlanteContientDemande.Nom }}</h4>
+                                <h4  style="text-align: center;">{{ demande.UserFaitDemande.Pseudo }}</h4>
+                                <small>{{ demande.DateDeCreation|date('Y-m-d H:i') }}</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}   
+        </div>
+
+    </div>
+
+
+    <script>
+        //effets des cartes
+        function overclickbrigth($byId) {
+            el=document.getElementById($byId);
+            el.style.borderColor = "hsla(60, 100%, 50%, 0.3)";
+            el.style.borderWidth = "6px";
+        }
+        function overflyingbrigth($byId) {
+            el=document.getElementById($byId);
+            el.style.borderColor = "hsla(120, 100%, 50%, 0.3)";
+            el.style.borderWidth = "3px";
+        }
+        function nooverflyingbrigth($byId) {
+            el=document.getElementById($byId);
+            el.style.borderColor = "rgba(0, 0, 0, 0.2)";
+            el.style.borderWidth = "1px";
+        }
+    </script>
+{% endblock %}

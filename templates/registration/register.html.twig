@@ -35,9 +35,13 @@
         {{ form_start(registrationForm) }}
             {{ form_row(registrationForm.email) }}
             {{ form_row(registrationForm.pseudo) }}
-            {{ form_row(registrationForm.plainPassword, {
+            {# {{ form_row(registrationForm.plainPassword, {
                 label: 'Password'
-            }) }}
+            }) }} #}
+            {# {{ form_row(form.plainpassword.first) }}
+            {{ form_row(form.plainpassword.second) }} #}
+
+            {{ form_row(registrationForm.plainPassword) }}
             <br>
             <br>
             {{ form_row(registrationForm.agreeTerms) }}
@@ -49,5 +53,29 @@
             </div>
         {{ form_end(registrationForm) }}
     </div>
+
+
+
+
+
+    <script>
+
+        // Mdp verif
+        function MdpVerif() {
+            el1=document.getElementById("InputNewPassword");
+            el2=document.getElementById("InputNewPasswordVerif");
+
+            if(el1.value !=null || el2.value !=null ){
+                if(el1.value==el2.value){
+                    document.getElementById("formverif").submit();
+                }
+                else{
+                    alert("Les mdp sont different!");
+                }
+            }
+
+        }
+
+    </script>
 
 {% endblock %}

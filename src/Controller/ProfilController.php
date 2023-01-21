@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Demande;
 use App\Entity\Plante;
 use App\Entity\User;
+use App\Repository\DemandeRepository;
 use App\Repository\PlanteRepository;
 use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -17,16 +19,19 @@ class ProfilController extends AbstractController
     private $repository_user;
     private $repository;
     private $security;
+    private $repository_demandes;
 
 
     public function __construct(
         UserRepository $userRepository,
         PlanteRepository $planteRepository,
+        DemandeRepository $demandeRepository,
         Security $security
         )
     {
         $this->repository_user = $userRepository;
         $this->repository = $planteRepository;
+        $this->repository_demandes = $demandeRepository;
         $this->security = $security;
     }
 
@@ -73,8 +78,18 @@ class ProfilController extends AbstractController
         {
             if($this->UserIsAllowed($userprofil))
             {
-                $plante->setUserKeepingPlant($userprofil);
-                $this->repository->save($plante,true);
+                //$plante->setUserKeepingPlant($userprofil);
+                //$this->repository->save($plante,true);
+
+                $demande = new Demande;
+                $demande->setPlanteContientDemande($plante);
+                $demande->setUserFaitDemande($user);
+                $demande->setUserRecoiDemande($userprofil);
+                $demande->setDateDeCreation(new \DateTime());
+
+                $this->repository_demandes->save($demande,true);
+
+
 
                 $this->addFlash('ProfilSuccess','Le profil a reçu votre proposition.');
                 return $this->redirectToRoute('app_home');

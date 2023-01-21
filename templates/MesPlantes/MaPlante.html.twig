@@ -124,7 +124,7 @@
 
 
 
-    <h1 class="display-6" style="text-align: center;">{{ planteselected.Nom }}</h1>
+    <h1 class="display-6" style="text-align: center;">{{ planteselected.Nom }} ({{ planteselected.UserOwningPlant.Pseudo }})</h1>
 
     {% for infos in app.flashes('AddPhotoNonPermise') %}
         <div class="alert alert-danger">

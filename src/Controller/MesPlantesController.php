@@ -48,11 +48,13 @@ class MesPlantesController extends AbstractController
         if(!empty($user))
         {
             $userId = $user->getId();
-            $plantes = $this->repository->findByUserId($userId);
-            $plantes = array_reverse($plantes);
+            $plantes = array_reverse( $this->repository->findByUserId($userId));
+            $plantesGardees = array_reverse($this->repository->findByUserGardId($userId));
+
             return $this->render('MesPlantes/MesPlantes.html.twig', [
                 'controller_name' => 'MesPlantesController',
-                'mesplantes' => $plantes
+                'mesplantes' => $plantes,
+                'plantesGardees' => $plantesGardees
             ]);
         }
         return $this->redirectToRoute('app_register');

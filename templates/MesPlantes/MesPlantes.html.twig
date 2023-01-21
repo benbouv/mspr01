@@ -120,7 +120,7 @@
 
     {# Tableau des cartes de plantes disponibles #}
     <div style="padding-left: 2.5em">
-        <h1>Vos dernières plantes ({{ app.user.email }})</h1>
+        <h1>Vos dernières plantes</h1>
         <div>
             <small>- Pour supprimer ou modifier : faite Click-droit.</small>
             </br>
@@ -129,6 +129,7 @@
         </br>
         </br>
         
+        {# Plantes Possedees #}
         <div class="row flex">
             <div class="col-3" style="height: 15em; width: 9em">
                 <span onclick="openNav()">
@@ -165,7 +166,44 @@
                     </a>
                 </div>
             {% endfor %}
+            
         </div>
+
+
+        </br>
+        </br>
+        <h1>Vos plantes gardées</h1>
+        </br>
+        </br>
+
+        {# Plante Gardees #}
+        <div class="row flex">
+            {% for plante in plantesGardees %}
+                <div class="col-3" style="height: 15em; width: 9em">
+                    <a href="{{ path('app_suiviplante', {id: plante.Id}) }}" data-idplante="{{ plante.Id }}" oncontextmenu="ClicDroitCarte(this)" style="text-decoration: none;">
+                        <div class="card" id="overfly{{ plante.Id }}" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style=
+                            "
+                            padding: 0.2em;
+                            height: 12em; 
+                            color: black;
+                            ">
+                            <div style="height: 8em;">
+                                {% if plante.image == null %}
+                                    <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" style="max-height: 8em; max-width: 7em;" alt="...">
+                                {% else %}
+                                    <img src="{{ asset('uploads/' ~ plante.image) }}" class="card-img-top" style="max-height: 8em; max-width: 7em;" alt="...">  
+                                {% endif %}
+                            </div>
+                            <div class="card-title">
+                                <h4  style="text-align: center;">{{ plante.Nom }}</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+            
+        </div>
+
     </div>
 
 
