@@ -137,7 +137,10 @@
             </div>
 
             <div>
-                <button type="button" class="btn btn-danger">SUPPRIMER MON COMPTE <br> (pas encore disponible)</button>
+                <form action="{{ path('app_moncompte_suppr') }}" method="post" onsubmit="return confirm('CECI VA DETRUIRE VOTRE COMPTE DÉFINITIVEMENT. Etes-vous bien sûr de vouloir supprimer votre compte définitivement?')">
+                    <button type="submit" class="btn btn-danger">SUPPRIMER MON COMPTE</button>
+                </form>
+                
             </div>
             <br>
             <br>

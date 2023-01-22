@@ -59,6 +59,16 @@ class DemandeRepository extends ServiceEntityRepository
          ;
     }
 
+    public function findByPlanteId($idvalue): array
+    {
+         return $this->createQueryBuilder('p')
+            ->andWhere('p.PlanteContientDemande = :val')
+            ->setParameter('val', $idvalue)
+            ->getQuery()
+            ->getResult()
+         ;
+    }
+
 
 
 //    /**

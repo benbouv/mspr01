@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Plante;
 use App\Entity\User;
 use App\Form\PlanteEntrerType;
+use App\Repository\DemandeRepository;
 use App\Repository\PhotoRepository;
 use App\Repository\MessageRepository;
 use App\Repository\PlanteRepository;
@@ -27,6 +28,7 @@ class MonCompteController extends AbstractController
         private $em;
         private $security;
         private $repository_user;
+        private $repository_demandes;
     // end
 
     public function __construct(PlanteRepository $planteRepository,  
@@ -34,6 +36,7 @@ class MonCompteController extends AbstractController
         Security $security,
         MessageRepository $messageRepository,
         PhotoRepository $photoRepository,
+        DemandeRepository $demandeRepository,
         UserRepository $userRepository
         )
     {
@@ -43,6 +46,7 @@ class MonCompteController extends AbstractController
         $this->em = $em;
         $this->security = $security;
         $this->repository_user = $userRepository;
+        $this->repository_demandes = $demandeRepository;
     }
 
 
@@ -222,5 +226,76 @@ class MonCompteController extends AbstractController
     }
 
 
+    // SUPPR COMPTE \\
+
+    #[Route('/user/MonCompte/suppresion', name: 'app_moncompte_suppr')]
+    public function supprcompte(UserPasswordHasherInterface $userPasswordHasherInterface)
+    {
+
+        /** @var User $user */
+        $user = $this->security->getUser();
+        if(!empty($user))
+        {
+
+            //suppresion des informations users
+            $user->setEmail(md5( uniqid("em"))."@nn.nn");
+            $user->setNom(null);
+            $user->setTelephone(null);
+            $user->setPseudo("NoName");
+            $user->setPassword(
+                $userPasswordHasherInterface->hashPassword($user, md5( uniqid("pw")))
+            );
+            $user->setLat(null);
+            $user->setLng(null);
+            $user->setRoles([]);
+
+            //suppresion des plantes
+            $userId = $user->getId();
+            $plantes = $this->repository->findByUserId($userId);
+
+            foreach($plantes as $plante)
+            {
+                //supresion des demandes
+                $demandes = $this->repository_demandes->findByPlanteId($plante->getId());
+                foreach($demandes as $demande)
+                {
+                    $this->repository_demandes->remove($demande,true);
+                }
+
+                //supression de l'image
+                $fichier_directory = $this->getParameter('images_directory');
+                if (is_file($fichier_directory . '/' . $plante->getImage()) && $plante->getImage() !== null)
+                {
+                    unlink($fichier_directory . '/' . $plante->getImage());
+                }
+                
+                //suppression de toutes les photos
+                $photos = $this->repository_photo->findByPlanteId($plante->getId());
+                foreach($photos as $photo)
+                {
+                    if (is_file($fichier_directory . '/' . $photo->getName()) && $photo->getName() !== null)
+                    {
+                        unlink($fichier_directory . '/' . $photo->getName());
+                    }
+                    $this->repository_photo->remove($photo,true);
+                }
+
+                //suppression de tous les messages
+                $messages = $this->repository_messages->findByAllByIdPlante($plante->getId());
+                foreach($messages as $message)
+                {
+                    $this->repository_messages->remove($message,true);
+                }
+
+                $this->repository->remove($plante,true);
+            }
+            
+
+            $this->repository_user->save($user,true);
+
+            return $this->redirectToRoute('app_moncompte');
+        }
+        return $this->redirectToRoute('app_register');
+    }
 
 }
