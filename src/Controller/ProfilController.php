@@ -78,14 +78,13 @@ class ProfilController extends AbstractController
         {
             if($this->UserIsAllowed($userprofil))
             {
-                //$plante->setUserKeepingPlant($userprofil);
-                //$this->repository->save($plante,true);
 
                 $demande = new Demande;
                 $demande->setPlanteContientDemande($plante);
                 $demande->setUserFaitDemande($user);
                 $demande->setUserRecoiDemande($userprofil);
                 $demande->setDateDeCreation(new \DateTime());
+                $demande->setEtat("EN_ATTENTE_DE_REPONSE");
 
                 $this->repository_demandes->save($demande,true);
 

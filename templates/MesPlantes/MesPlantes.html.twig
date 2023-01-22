@@ -99,7 +99,7 @@
               <br/> #}
               <p>***</p>
 
-              <label for="exampleFormControlTextarea1" class="form-label">Information sur la plante</label>
+              <label for="exampleFormControlTextarea1" class="form-label">Informations aux gardiens de la plante <br> (arrosage, lieu...)</label>
               <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3" placeholder="Periode d'arossage, conditionnment..."></textarea>
               <br/>
               <p>***</p>
@@ -180,8 +180,8 @@
         <div class="row flex">
             {% for plante in plantesGardees %}
                 <div class="col-3" style="height: 15em; width: 9em">
-                    <a href="{{ path('app_suiviplante', {id: plante.Id}) }}" data-idplante="{{ plante.Id }}" oncontextmenu="ClicDroitCarte(this)" style="text-decoration: none;">
-                        <div class="card" id="overfly{{ plante.Id }}" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style=
+                    <a href="{{ path('app_suiviplante', {id: plante.Id}) }}" style="text-decoration: none;">
+                        <div class="card" id="overflyo{{ plante.Id }}" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style=
                             "
                             padding: 0.2em;
                             height: 12em; 

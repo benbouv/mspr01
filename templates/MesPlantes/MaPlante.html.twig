@@ -151,25 +151,36 @@
                     </a>
                 </div>
                 {% for photo in photosdelaplante %}
-                    <div class="overlay" id="overflypho{{ photo.Id }}" style="
+                    {# <div class="overlay" id="overflypho{{ photo.Id }}" style="
                         width: auto; 
                         height: 0em; 
                         position: absolute;
                         color: #b9c7cf;
                         ">
-                        <a href="{{ path('app_suiviplante_supprphoto', {id: planteselected.Id, photo_id: photo.Id}) }}">🗑</a>
-                    </div>
-                    <div class="col-3" style="height: 19em; width: 18em; margin-right: 0.1em;">
-                        <a href="{{ asset('uploads/' ~ photo.name) }}" target="_blank" style="text-decoration: none; color:black;" oncontextmenu="ClicDroitImage(this,'overflypho{{ photo.Id }}')">
-                            <div class="card" style="height: 18em; width: 17em; text-align: center; padding: 0.2em;">
-                                <div class="card-title" style="height: 1em;">
-                                    <p>{{ photo.date|date('Y-m-d H:i') }}</p>
+                        <a href="">🗑</a>
+                        
+                    </div> #}
+                    <div style="display:flex; flex-direction: column; width:19em;">
+                    
+                        <div class="col-3" style="height: 19em; width: 18em; margin-right: 0.1em;">
+                            <a href="{{ asset('uploads/' ~ photo.name) }}" target="_blank" style="text-decoration: none; color:black;" oncontextmenu="">
+                                <div class="card" style="height: 18em; width: 17em; text-align: center; padding: 0.2em;">
+                                    <div class="card-title" style="height: 1em;">
+                                        <p>{{ photo.date|date('Y-m-d H:i') }}</p>
+                                    </div>
+                                    <div style="height: 15em;">
+                                        <img src="{{ asset('uploads/' ~ photo.name) }}" style="max-height: 15em; max-width: 16em;" class="card-img-top" alt="...">
+                                    </div> 
                                 </div>
-                                <div style="height: 15em;">
-                                    <img src="{{ asset('uploads/' ~ photo.name) }}" style="max-height: 15em; max-width: 16em;" class="card-img-top" alt="...">
-                                </div> 
-                            </div>
-                        </a>
+                            </a>
+                        </div>
+
+                        <div style="width:18em; height:3em; text-align:center; margin:auto;">
+                          <form action="{{ path('app_suiviplante_supprphoto', {id: planteselected.Id, photo_id: photo.Id}) }}" style=" font-size: 22px; margin: auto; padding: 0px;" method="post" onsubmit="return confirm('Etes-vous bien sûr de vouloir supprimer cette photo?')">
+                              <button class="btn btn-secondary" style="flex: 30%; font-size: 22px; margin: auto; padding: 0px; padding-right: 1em; padding-left: 1em;" type="submit">🗑</button>
+                          </form>
+                        </div>
+
                     </div>
                 {% endfor %}
             </div>
@@ -220,12 +231,20 @@
                 {% if role == "ROLE_BOTANIST"  %}
                   {% set continue = false %}
                   <div class="chat-log__item chat-log__item--own" style="background: #c3bd74; text-align: center;">
+                    
                     <h6>(botaniste certifié ✩✩✩✩)</h6>
-                    <div class="chat-log__item chat-log__item--own" oncontextmenu="ClicDroitChat('overflybot{{ message.Id }}')">
+                    <div class="chat-log__item chat-log__item--own" oncontextmenu="">
+                      <button type="button" onclick="ClicDroitChat('overflybot{{ message.Id }}')">🖉</button>
                       <div class="overlay" id="overflybot{{ message.Id }}" style="width: 10em; height: 0em; position: static; margin: 0.1em; color: #b9c7cf;">
                         <div style="display: flex;">                      
                           <a href="javascript:void(0)" onclick="messageeditor('overfly_em{{ message.Id }}','maskable_em{{ message.Id }}')" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;">🖉</a>
-                          <a href="{{ path('app_suiviplante_supprmessage', {id: planteselected.Id, message_id: message.Id}) }}" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;">🗑</a>
+                          <form action="{{ path('app_suiviplante_supprmessage', {id: planteselected.Id, message_id: message.Id}) }}" method="post" 
+                          style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding: 0px;"
+                          onsubmit="return confirm('Etes-vous bien sûr de vouloir supprimer ce commentaire?')"
+                          >
+                            <button class="btn btn-dark" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;" type="submit">🗑</button>
+                          
+                          </form>
                         </div>
                       </div>
                       <h3 class="chat-log__author"> {{ message.userWritingMessage.pseudo }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>
@@ -253,11 +272,21 @@
                 {% endif %}
               {% endfor %}
               {% if continue %}
-                <div class="chat-log__item chat-log__item--own" oncontextmenu="ClicDroitChat('overfly{{ message.Id }}')">
+                <div class="chat-log__item chat-log__item--own" oncontextmenu="">
+                  <button type="button" onclick="ClicDroitChat('overfly{{ message.Id }}')">🖉</button>
+                  <br>
+                  <br>
                   <div class="overlay" id="overfly{{ message.Id }}" style="width: 10em; height: 0em; position: static; margin: 0.1em; color: #b9c7cf;">
                     <div style="display: flex;">                      
                       <a href="javascript:void(0)" onclick="messageeditor('overfly_em{{ message.Id }}','maskable_em{{ message.Id }}')" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;">🖉</a>
-                      <a href="{{ path('app_suiviplante_supprmessage', {id: planteselected.Id, message_id: message.Id}) }}" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;">🗑</a>
+
+                      <form action="{{ path('app_suiviplante_supprmessage', {id: planteselected.Id, message_id: message.Id}) }}" method="post" 
+                      style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding: 0px;"
+                      onsubmit="return confirm('Etes-vous bien sûr de vouloir supprimer ce commentaire?')"
+                      >
+                        <button class="btn btn-dark" style="flex: 30%; font-size: 22px; margin: 0px; padding: 0px; padding-right: 1em;" type="submit">🗑</button>
+                      
+                      </form>
                     </div>
                   </div>
                   <h3 class="chat-log__author"> {{ message.userWritingMessage.pseudo }} <small>{{ message.date|date('Y-m-d H:i') }}</small></h3>

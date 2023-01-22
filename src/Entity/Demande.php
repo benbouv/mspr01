@@ -26,6 +26,9 @@ class Demande
     #[ORM\ManyToOne]
     private ?User $UserRecoiDemande = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $etat = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class Demande
     public function setUserRecoiDemande(?User $UserRecoiDemande): self
     {
         $this->UserRecoiDemande = $UserRecoiDemande;
+
+        return $this;
+    }
+
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?string $etat): self
+    {
+        $this->etat = $etat;
 
         return $this;
     }
