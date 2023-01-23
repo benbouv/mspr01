@@ -16,5 +16,107 @@
       <button class="btn btn-primary">Ajouter</button>
     {{ form_end(form) }}
   </div>
+  
+  {# <!DOCTYPE html> 
+  <html lang="fr">
+    <head>
+    <title>HTML5 Camera</title> 
+
+    <meta charset="UTF-8">
+
+    <style type="text/css">
+
+
+      button{
+
+      width:100px;
+      margin:5px;
+      font-weight: bold;
+      height:50px;
+
+      }
+
+    </style>
+
+    <script>
+
+      function ouvrir_camera() {
+
+      navigator.mediaDevices.getUserMedia({ audio: false, video: { width: 400 } }).then(function(mediaStream) {
+
+        var video = document.getElementById('sourcevid');
+        video.srcObject = mediaStream;
+
+        var tracks = mediaStream.getTracks();
+
+        document.getElementById("message").innerHTML="message: "+tracks[0].label+" connecté"
+
+        console.log(tracks[0].label)
+        console.log(mediaStream)
+
+        video.onloadedmetadata = function(e) {
+        video.play();
+        };
+        
+      }).catch(function(err) { console.log(err.name + ": " + err.message);
+
+      document.getElementById("message").innerHTML="message: connection refusé"});
+      }
+
+      function photo(){
+
+      var vivi = document.getElementById('sourcevid');
+      //var canvas1 = document.createElement('canvas');
+      var canvas1 = document.getElementById('cvs')
+      var base64=canvas1.toDataURL("image/png"); //l'image au format base 64
+      document.getElementById('tar').value='';
+      document.getElementById('tar').value=base64;
+
+      //var base64=canvas1.toDataURL("image/png"); //l'image au format base 64
+      //document.getElementById('tar').value='';
+      //document.getElementById('tar').value=base64;
+      }
+      
+      function fermer(){
+
+      var video = document.getElementById('sourcevid');
+      var mediaStream=video.srcObject;
+      console.log(mediaStream)
+      var tracks = mediaStream.getTracks();
+      console.log(tracks[0])
+      tracks.forEach(function(track) {
+        track.stop();
+        document.getElementById("message").innerHTML="message: "+tracks[0].label+" déconnecté"
+      });
+
+      video.srcObject = null;
+      }
+
+
+    </script>
+    
+    </head>
+
+    <body>
+      <div style='display:inline-block'>
+
+      <video id="sourcevid" width='400' autoplay="true"></video>
+
+      <div id="message" style='height:20px;width:350px;margin:5px;'>message:</div>
+      </div>
+
+      <canvas id="cvs" style='display:inline-block'></canvas>
+
+      <div>
+      <button onclick='ouvrir_camera()' >ouvrir camera</button>
+      <button onclick='fermer()' >fermer camera</button>
+      <br>
+      <button onclick='photo()' >prise de photo</button>
+      <input type="text" id="tar">
+      </div>
+
+      <div id="jaxa" style='width:80%;margin:5px;'>message:</div>
+    </body>
+  </html> #}
 
 {% endblock %}

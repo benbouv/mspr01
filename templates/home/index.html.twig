@@ -48,7 +48,7 @@
     <thead class="thead-dark">
         <tr>
             <th>Pseudo</th>
-            <th>Role</th>
+            <th></th>
             <th>selectionner</th>
         </tr>
     </thead>
@@ -89,13 +89,19 @@
                         //}
                     {# {% endif %} #}
                     
-                    tab.push({'title':'{{user.email}}','lat':'{{user.lat}}','lng':'{{user.lng}}'});
+                    tab.push({'title':'{{user.pseudo}}','lat':'{{user.lat}}','lng':'{{user.lng}}'});
                     
                 </script>
                 <td>{{user.pseudo}}</td>
                 <td>
                     {% for role in user.roles %}
-                        {{role}},
+                        {% if role == "ROLE_BOTANIST" %}
+                            <div class="alert alert-success" style="height:1.6em; width:6em; margin:0px; padding:0px; padding-left:0.3em;" > 
+                            <p style="padding:0em;">
+                                Botaniste ✓
+                            </p> 
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 </td>
                 <td>
