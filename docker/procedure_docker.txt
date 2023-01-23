@@ -6,7 +6,7 @@ C:\Users\Benoit\workspace\symfony-mspr01\docker>docker-compose up -d
 
 - Then access inside the phpsymfony container bash :
 docker exec -it phpsymfony bash
-php bin/console doctrine:database:create
+php bin/console doctrine:database:create (database name --> arosaje)
 php bin/console doctrine:migrations:migrate
 exit
 
