@@ -1,0 +1,496 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes demandes{% endblock %}
+
+{% block head %}
+    <style>
+
+      .overlay {
+        height: 85%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 5%;
+        margin-top: 2%;
+        margin-bottom: 5%;
+        margin-left: 7%;
+        background-color: rgba(0, 0, 0, 0.75);
+        overflow-x: hidden;
+        transition: 0.5s;
+        border-radius: 15px;
+        display:none;
+      }
+      .overlay-content {
+        position: relative;
+        top: 10%;
+        width: 100%;
+        text-align: center;
+        margin-top: 30px;
+      }
+      .overlay .formulaire {
+        padding: 10px;
+        text-decoration: none;
+        font-size: 32px;
+        color: #b9c7cf;
+        display: block;
+        transition: 0.4s;
+      }
+      .overlay a {
+        padding: 10px;
+        text-decoration: none;
+        font-size: 32px;
+        color: #b9c7cf;
+        display: block;
+        transition: 0.4s;
+      }
+      .overlay a:hover,
+      .overlay a:focus {
+        color: #eeeeee;
+      }
+      .overlay .close {
+        position: absolute;
+        top: 10px;
+        right: 35px;
+        font-size: 50px;
+      }
+      @media screen and (max-height: 450px) {
+        .overlay a {
+          font-size: 20px
+        }
+        .overlay .closed {
+          font-size: 40px;
+          top: 15px;
+          right: 35px;
+        }
+      }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+
+
+
+
+
+
+    {# Tableau des cartes de plantes disponibles #}
+    <div style="padding-left: 2.5em">
+        <h1>Demandes reçues</h1>
+        </br>
+        </br>
+        
+        {# Demandes Possedees #}
+        <div class="row flex">
+            {% for demande in demandesrecus %}
+                <div class="col-3" style="height: 22em; width: 9em">
+                    <div onclick="openNav('navoverlay{{ demande.Id }}')">
+                        <div class="card" id="overfly{{ demande.Id }}" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style=
+                            "
+                            padding: 0.2em;
+                            height: 21em; 
+                            color: black;
+                            ">
+                            <div style="height: 4em;">
+                                {% if demande.PlanteContientDemande.image == null %}
+                                    <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" style="max-height: 4em; max-width: 7em;" alt="...">
+                                {% else %}
+                                    <img src="{{ asset('uploads/' ~ demande.PlanteContientDemande.image) }}" class="card-img-top" style="max-height: 4em; max-width: 7em;" alt="...">  
+                                {% endif %}
+                            </div>
+                            <div class="card-title">
+                                <h4  style="text-align: center;">{{ demande.PlanteContientDemande.Nom }}</h4>
+                                <h4  style="text-align: center;">{{ demande.UserFaitDemande.Pseudo }}</h4>
+                                <small>{{ demande.DateDeCreation|date('Y-m-d H:i') }}</small>
+                                <br/>
+                                <br/>
+                                {% if demande.Etat == "DEMANDE_VALIDÉE" %}
+                                    <small class="alert alert-success">Validée</small>
+                                {% elseif demande.Etat == "DEMANDE_REFUSÉE" %}
+                                    <small class="alert alert-danger">Refusée</small>
+                                {% elseif demande.Etat == "DEMANDE_ACCEPTÉE" %}
+                                    <small class="alert alert-success">Favorable</small>
+                                {% elseif demande.Etat == "DEMANDE_RÉVOQUÉE" %}
+                                    <small class="alert alert-danger">Terminée</small>
+                                {% else %}
+                                    <small class="alert alert-warning">En attente</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if demande.Etat == "DEMANDE_RÉVOQUÉE" or demande.Etat == "DEMANDE_VALIDÉE" %}
+                    {# Formulaire overlay, annuler demande #}
+                    <div id="navoverlay{{ demande.Id }}" class="overlay">
+                        <a href="javascript:void(0)" class="closed" onclick="closeNav('navoverlay{{ demande.Id }}')" style=" margin:auto; padding:auto; text-align:right; font-size: 42px;">X</a>
+                        <div class="overlay-content">
+                            <div class="formulaire">
+                                <div class="mb-3">
+                                    <h2>MA DEMANDE</h2>
+                                    <br/>
+                                    <p>ÉTAT:</p>
+                                    <br/>
+                                    {% if demande.Etat == "DEMANDE_VALIDÉE" %}
+                                        <small class="alert alert-success">Valider et finaliser par le proprietaire.</small>
+                                    {% elseif demande.Etat == "DEMANDE_REFUSÉE" %}
+                                        <small class="alert alert-danger">Refuser par le gardien.</small>
+                                    {% elseif demande.Etat == "DEMANDE_ACCEPTÉE" %}
+                                        <small class="alert alert-success">En attente de validation du proprietaire.</small>
+                                    {% elseif demande.Etat == "DEMANDE_RÉVOQUÉE" %}
+                                        <small class="alert alert-danger">La demande est terminée par le proprietaire.</small>
+                                    {% else %}
+                                        <small class="alert alert-warning">En attente de la réponse du gardien.</small>
+                                    {% endif %}
+                                    <br/>
+                                    <br/>
+                                    <p>***</p>
+                                    <br/>
+                                    <br/>
+                                    {# <div style="display:flex; justify-content: space-around;">
+                                        <div style="flex:10%">
+                                            <a href="{{ path('app_mesdemandes_suppr', {id: demande.Id}) }}">
+                                                <button class="btn btn-danger" type="button" style="">LA SUPPRIMER</button>
+                                            </a>
+                                        </div>
+                                    </div> #}
+                                </div>
+                            </div>
+                            <br/>
+                            <p>***</p>
+                            <br/>
+                            <button type="button" class="btn btn-dark" onclick="closeNav('navoverlay{{ demande.Id }}')" style=" margin:auto; padding:auto; text-align:right; font-size: 42px;">Fermer</button>
+                            <br/>
+                            <p>***</p>
+                            <br/>
+                        </div>
+                    </div>
+                {% else %}
+                    {# Formulaire overlay, acceptation ou refuser #}
+                    <div id="navoverlay{{ demande.Id }}" class="overlay">
+                        <a href="javascript:void(0)" class="closed" onclick="closeNav('navoverlay{{ demande.Id }}')" style=" margin:auto; padding:auto; text-align:right; font-size: 42px;">X</a>
+                        <div class="overlay-content">
+                            <div class="formulaire">
+                                <div class="mb-3">
+                                    <h2>DEMANDE DE GARDE</h2>
+                                    <br/>
+                                    <p>ÉTAT:</p>
+                                    <br/>
+                                    {% if demande.Etat == "DEMANDE_VALIDÉE" %}
+                                        <small class="alert alert-success">Valider et finaliser par le proprietaire.</small>
+                                    {% elseif demande.Etat == "DEMANDE_REFUSÉE" %}
+                                        <small class="alert alert-danger">Refuser par le gardien.</small>
+                                    {% elseif demande.Etat == "DEMANDE_ACCEPTÉE" %}
+                                        <small class="alert alert-success">En attente de validation du proprietaire.</small>
+                                    {% elseif demande.Etat == "DEMANDE_RÉVOQUÉE" %}
+                                        <small class="alert alert-danger">La demande est terminée par le proprietaire.</small>
+                                    {% else %}
+                                        <small class="alert alert-warning">En attente de la réponse du gardien.</small>
+                                    {% endif %}
+                                    <br/>
+                                    <br/>
+                                    <p>***</p>
+                                    <br/>
+                                    <p> {{ demande.PlanteContientDemande.Nom }} </p>
+                                    <br/>
+                                    <div style="height: 4em;">
+                                        {% if demande.PlanteContientDemande.image == null %}
+                                            <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" style="max-height: 4em; max-width: 7em;" alt="...">
+                                        {% else %}
+                                            <img src="{{ asset('uploads/' ~ demande.PlanteContientDemande.image) }}" class="card-img-top" style="max-height: 4em; max-width: 7em;" alt="...">  
+                                        {% endif %}
+                                    </div>
+                                    <br/>
+                                    <small> {{ demande.PlanteContientDemande.PeriodeArrosage}} </small>
+                                    <br/>
+                                    <p>***</p>
+                                    <br/>
+                                    <h2>ACCEPTER OU REFUSER</h2>
+                                    <br/>
+                                    <div style="display:flex; justify-content: space-around;">
+                                        <div style="flex:10%">
+                                            <a href="{{ path('app_mesdemandes_accept', {id: demande.Id}) }}">
+                                                <button class="btn btn-success" type="button" style="font-size: 32px;">✓</button>
+                                            </a>
+                                        </div>
+                                        <div style="flex:10%">
+                                            <a href="{{ path('app_mesdemandes_refus', {id: demande.Id}) }}">
+                                                <button class="btn btn-danger" type="button" style="font-size: 32px;">✗</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <br/>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-dark" onclick="closeNav('navoverlay{{ demande.Id }}')" style=" margin:auto; padding:auto; text-align:right; font-size: 42px;">Fermer</button>
+                            <br/>
+                            <p>***</p>
+                            <br/>
+                        </div>
+                        
+                    </div>
+                {% endif %}
+
+            {% endfor %}   
+        </div>
+
+
+        </br>
+        </br>
+        <h1>Demandes envoyées</h1>
+        </br>
+        </br>
+
+        {# Demande envoyer #}
+        <div class="row flex">
+            {% for demande in demandesenvoyers %}
+                <div class="col-3" style="height: 22em; width: 9em">
+                    <div onclick="openNav('navoverlayo{{ demande.Id }}')" style="">
+                        <div class="card" id="overflyo{{ demande.Id }}" onmousedown="overclickbrigth(id)" onmouseup="overflyingbrigth(id)" onmouseover="overflyingbrigth(id)" onmouseout="nooverflyingbrigth(id)" style=
+                            "
+                            padding: 0.2em;
+                            height: 21em; 
+                            color: black;
+                            ">
+                            <div style="height: 4em;">
+                                {% if demande.PlanteContientDemande.image == null %}
+                                    <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" style="max-height: 4em; max-width: 7em;" alt="...">
+                                {% else %}
+                                    <img src="{{ asset('uploads/' ~ demande.PlanteContientDemande.image) }}" class="card-img-top" style="max-height: 4em; max-width: 7em;" alt="...">  
+                                {% endif %}
+                            </div>
+                            <div class="card-title">
+                                <h4  style="text-align: center;">{{ demande.PlanteContientDemande.Nom }}</h4>
+                                <h4  style="text-align: center;">{{ demande.UserFaitDemande.Pseudo }}</h4>
+                                <small>{{ demande.DateDeCreation|date('Y-m-d H:i') }}</small>
+                                <br/>
+                                <br/>
+                                {% if demande.Etat == "DEMANDE_VALIDÉE" %}
+                                    <small class="alert alert-success">Validée</small>
+                                {% elseif demande.Etat == "DEMANDE_REFUSÉE" %}
+                                    <small class="alert alert-danger">Refusée</small>
+                                {% elseif demande.Etat == "DEMANDE_ACCEPTÉE" %}
+                                    <small class="alert alert-success">Favorable</small>
+                                {% elseif demande.Etat == "DEMANDE_RÉVOQUÉE" %}
+                                    <small class="alert alert-danger">Terminée</small>
+                                {% else %}
+                                    <small class="alert alert-warning">En attente</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if demande.Etat == "DEMANDE_ACCEPTÉE" %}
+                    {# Formulaire overlay, validation final #}
+                    <div id="navoverlayo{{ demande.Id }}" class="overlay">
+                        <a href="javascript:void(0)" class="closed" onclick="closeNav('navoverlayo{{ demande.Id }}')" style=" margin:auto; padding:auto; text-align:right; font-size: 42px;">X</a>
+                        <div class="overlay-content">
+                            <div class="formulaire">
+                                <div class="mb-3">
+                                    <h2>VALIDATION DE LA GARDE</h2>
+                                    <br/>
+                                    <p>ÉTAT:</p>
+                                    <br/>
+                                    {% if demande.Etat == "DEMANDE_VALIDÉE" %}
+                                        <small class="alert alert-success">Valider et finaliser par le proprietaire.</small>
+                                    {% elseif demande.Etat == "DEMANDE_REFUSÉE" %}
+                                        <small class="alert alert-danger">Refuser par le gardien.</small>
+                                    {% elseif demande.Etat == "DEMANDE_ACCEPTÉE" %}
+                                        <small class="alert alert-success">En attente de validation du proprietaire.</small>
+                                    {% elseif demande.Etat == "DEMANDE_RÉVOQUÉE" %}
+                                    <small class="alert alert-danger">La demande est terminée par le proprietaire.</small>
+                                    {% else %}
+                                        <small class="alert alert-warning">En attente de la réponse du gardien.</small>
+                                    {% endif %}
+                                    <br/>
+                                    <br/>
+                                    <p>***</p>
+                                    <br/>
+                                    <div style="display:flex; justify-content: space-around;">
+                                        <div style="width:7em;">
+                                            <a href="{{ path('app_profilpage', {id: demande.UserRecoiDemande.Id}) }}" target="_blank">
+                                                <button class="btn btn-success" type="button" style="font-size: 24px;">Voir le profil du gardien</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <p> {{ demande.PlanteContientDemande.Nom }} </p>
+                                    <br/>
+                                    <div style="height: 4em;">
+                                        {% if demande.PlanteContientDemande.image == null %}
+                                            <img src="{{ asset('build/img/logo-cycloop.png') }}" class="card-img-top" style="max-height: 4em; max-width: 7em;" alt="...">
+                                        {% else %}
+                                            <img src="{{ asset('uploads/' ~ demande.PlanteContientDemande.image) }}" class="card-img-top" style="max-height: 4em; max-width: 7em;" alt="...">  
+                                        {% endif %}
+                                    </div>
+                                    <br/>
+                                    <small> {{ demande.PlanteContientDemande.PeriodeArrosage}} </small>
+                                    <br/>
+                                    <p>***</p>
+                                    <br/>
+                                    <h2>VALIDER LA GARDE</h2>
+                                    <br/>
+                                    <div style="display:flex; justify-content: space-around;">
+                                        <div style="flex:10%">
+                                            <a href="{{ path('app_mesdemandes_valide', {id: demande.Id}) }}">
+                                                <button class="btn btn-success" type="button" style="font-size: 32px;">Valider et finaliser la demande</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <p>***</p>
+                                    <br/>
+                                    <h2>ANNULER LA DEMANDE</h2>
+                                    <br/>
+                                    <div style="display:flex; justify-content: space-around;">
+                                        <div style="flex:10%">
+                                            <a href="{{ path('app_mesdemandes_suppr', {id: demande.Id}) }}">
+                                                <button class="btn btn-danger" type="button" style="">LA SUPPRIMER</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <br/>
+                                </div>
+                            </div>
+                            <br/>
+                            <p>***</p>
+                            <br/>
+                            <button type="button" class="btn btn-dark" onclick="closeNav('navoverlay{{ demande.Id }}')" style=" margin:auto; padding:auto; text-align:right; font-size: 42px;">Fermer</button>
+                            <br/>
+                            <p>***</p>
+                            <br/>
+                        </div>
+                    </div>
+                {% elseif demande.Etat == "DEMANDE_VALIDÉE" %}
+                    {# Formulaire overlay, revoquer la demande #}
+                    <div id="navoverlayo{{ demande.Id }}" class="overlay">
+                        <a href="javascript:void(0)" class="closed" onclick="closeNav('navoverlayo{{ demande.Id }}')" style=" margin:auto; padding:auto; text-align:right; font-size: 42px;">X</a>
+                        <div class="overlay-content">
+                            <div class="formulaire">
+                                <div class="mb-3">
+                                    <h2>TERMINER MA DEMANDE ?</h2>
+                                    <br/>
+                                    <h2>ÉTAT:</h2>
+                                    <br/>
+                                    {% if demande.Etat == "DEMANDE_VALIDÉE" %}
+                                        <small class="alert alert-success">Valider et finaliser par le proprietaire.</small>
+                                    {% elseif demande.Etat == "DEMANDE_REFUSÉE" %}
+                                        <small class="alert alert-danger">Refuser par le gardien.</small>
+                                    {% elseif demande.Etat == "DEMANDE_ACCEPTÉE" %}
+                                        <small class="alert alert-success">En attente de validation du proprietaire.</small>
+                                    {% elseif demande.Etat == "DEMANDE_RÉVOQUÉE" %}
+                                        <small class="alert alert-danger">La demande est terminée par le proprietaire.</small>
+                                    {% else %}
+                                        <small class="alert alert-warning">En attente de la réponse du gardien.</small>
+                                    {% endif %}
+                                    <br/>
+                                    <br/>
+                                    <p>***</p>
+                                    <br/>
+                                    <p>Retirer le gardien de la plante ?</p>
+                                    <br/>
+                                    <div style="display:flex; justify-content: space-around;">
+                                        <div style="flex:10%; ">
+                                            <a href="{{ path('app_mesdemandes_revoc', {id: demande.Id}) }}">
+                                                <button class="btn btn-danger" type="button" style="width: 15em; height:4em;">METTRE FIN A LA GARDE</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            <p>***</p>
+                            <br/>
+                            <button type="button" class="btn btn-dark" onclick="closeNav('navoverlayo{{ demande.Id }}')" style=" margin:auto; padding:auto; text-align:right; font-size: 42px;">Fermer</button>
+                            <br/>
+                            <p>***</p>
+                            <br/>
+                        </div>
+                    </div>
+                {% else %}
+                    {# Formulaire overlay, annuler demande #}
+                    <div id="navoverlayo{{ demande.Id }}" class="overlay">
+                        <a href="javascript:void(0)" class="closed" onclick="closeNav('navoverlayo{{ demande.Id }}')" style=" margin:auto; padding:auto; text-align:right; font-size: 42px;">X</a>
+                        <div class="overlay-content">
+                            <div class="formulaire">
+                                <div class="mb-3">
+                                    <h2>ANNULER MA DEMANDE ?</h2>
+                                    <br/>
+                                    <p>ÉTAT:</p>
+                                    <br/>
+                                    {% if demande.Etat == "DEMANDE_VALIDÉE" %}
+                                        <small class="alert alert-success">Valider et finaliser par le proprietaire.</small>
+                                    {% elseif demande.Etat == "DEMANDE_REFUSÉE" %}
+                                        <small class="alert alert-danger">Refuser par le gardien.</small>
+                                    {% elseif demande.Etat == "DEMANDE_ACCEPTÉE" %}
+                                        <small class="alert alert-success">En attente de validation du proprietaire.</small>
+                                    {% elseif demande.Etat == "DEMANDE_RÉVOQUÉE" %}
+                                        <small class="alert alert-danger">La demande est terminée par le proprietaire.</small>
+                                    {% else %}
+                                        <small class="alert alert-warning">En attente de la réponse du gardien.</small>
+                                    {% endif %}
+                                    <br/>
+                                    <br/>
+                                    <p>***</p>
+                                    <br/>
+                                    <br/>
+                                    <div style="display:flex; justify-content: space-around;">
+                                        <div style="flex:10%">
+                                            <a href="{{ path('app_mesdemandes_suppr', {id: demande.Id}) }}">
+                                                <button class="btn btn-danger" type="button" style="">LA SUPPRIMER</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            <p>***</p>
+                            <br/>
+                            <button type="button" class="btn btn-dark" onclick="closeNav('navoverlayo{{ demande.Id }}')" style=" margin:auto; padding:auto; text-align:right; font-size: 42px;">Fermer</button>
+                            <br/>
+                            <p>***</p>
+                            <br/>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}   
+        </div>
+
+    </div>
+
+
+    <script>
+        //overlays demande refuse or accept
+        function openNav($byId) {
+            el=document.getElementById($byId);
+            el.style.width = "25em";
+            el.style.display = 'block';
+        }
+        function closeNav($idnav) {
+            el=document.getElementById($idnav);
+            el.style.width = "0em";
+            el.style.display ="none";
+        }
+
+
+        //effets des cartes
+        function overclickbrigth($byId) {
+            el=document.getElementById($byId);
+            el.style.borderColor = "hsla(60, 100%, 50%, 0.3)";
+            el.style.borderWidth = "6px";
+        }
+        function overflyingbrigth($byId) {
+            el=document.getElementById($byId);
+            el.style.borderColor = "hsla(120, 100%, 50%, 0.3)";
+            el.style.borderWidth = "3px";
+        }
+        function nooverflyingbrigth($byId) {
+            el=document.getElementById($byId);
+            el.style.borderColor = "rgba(0, 0, 0, 0.2)";
+            el.style.borderWidth = "1px";
+        }
+    </script>
+{% endblock %}

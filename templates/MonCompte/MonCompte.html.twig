@@ -14,16 +14,138 @@
 {% block body %}
 
 
+
+
+{% for infos in app.flashes('EmailNonValide') %}
+    <div class="alert alert-danger">
+        {{ infos }}
+    </div>
+{% endfor %}
+{% for infos in app.flashes('TelNonValide') %}
+    <div class="alert alert-danger">
+        {{ infos }}
+    </div>
+{% endfor %}
+
+
+
+
     {# Corps #}
-    <div style="padding-left: 2.5em">
-        <h1>{{ app.user.email }}</h1>
-        <div>
-            <small>- Pour supprimer ou modifier : faite Click-droit.</small>
-            </br>
-            <small>- Appuyer sur l'icon "+" pour ajouter une plante.</small>
+
+    <div style="text-align:center;">
+        <div style="border-bottom: 1px solid #222222aa;">
+            <div style="margin:1em; ">
+                <h1>VOTRE COMPTE</h1>
+            </div>
         </div>
-        </br>
-        </br>
+
+
+        {# Les informations personnelles #}
+
+        <div style="margin:2em; color: #c8e4af; font-weight: bold;">
+            <h1 class="display-5">Vos informations personnelles</h1>
+        </div>
+
+        <div style="display: inline-block;">
+            <div style="display:flex; width:30em;">
+                <div style="flex:0.7;">
+                    <div style="justify-content:center; margin-left:2em;">
+
+                        <form id="formverif" action="{{ path('app_moncompte_traitement') }}" method="post">
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="exampleInputPseudo" aria-describedby="emailHelp" name="infoPseudo" value="{{ app.user.pseudo }}" placeholder="Indiquez votre pseudo">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="exampleInputNom" name="infoNom" value="{{ app.user.nom }}" placeholder="Indiquez votre nom">
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" class="form-control" id="exampleInputEmail" name="infoEmail" value="{{ app.user.email }}" placeholder="Indiquez votre email">  
+                            </div>
+                            <div class="mb-3">
+                                <input type="tel" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="form-control" id="exampleInputTel" name="infoTel" value="{{ app.user.telephone }}" placeholder="Indiquez votre telephone">
+                            </div>
+                            <div class="mb-3">
+                                <h1>...</h1>
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="InputNewPassword" name="infoPass" placeholder="Changer le mdp" value="">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="InputNewPasswordVerif" name="infoPassVerif" placeholder="Confirmez le nouveau mdp">
+                            </div>
+                            <button type="submit" hidden id="infovalide"></button>
+                        </form>
+
+                        <button type="button" class="btn btn-secondary" style="background-color:#f5f7f2; color:black; width: 100%;" onclick="MdpVerif()">Enregistrer les informations</button>
+                    </div>
+                    <br>
+                </div>
+                <div style="flex:0.3; display:flex; flex-direction: column;">
+                    <div style="margin-left:1em">
+                        <img src="{{ asset('build/img/profil-vide.png') }}" alt="..." height="200px" width="200px">
+                        <p>{{ app.user.pseudo }}</p>
+                        <small>Note :</small><p>✩✩</p>  
+                    </div>
+                    <br>
+                    <div style="margin-left:3em; text-align:left;">
+                        <small>Nombre de plantes : x</small>
+                        <small>Nombre de gardes : x</small>
+                        <small>Nombre de demandes : x</small>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+
+        {# Les Options #}
+
+        <div style=" margin-bottom:2em; margin-top:1em; color: #c8e4af; font-weight: bold;">
+            <h1 class="display-5">Vos parametres</h1>
+        </div>
+        <div style=" display:flex;  flex-direction: column; justify-content:center; margin:2em;">
+            <div style=" display:flex; justify-content: center;">
+                <form action="{{ path('app_moncompte_setoptions') }}" method="post" style="text-align:left; width: 220px">
+                    <div class="form-switch">
+                        {% if IsGardien == true %}
+                            <input class="form-check-input" name="setIsGardien" type="checkbox" role="switch" id="flexSwitchCheckDefault1" checked>
+                        {% else %}
+                            <input class="form-check-input" name="setIsGardien" type="checkbox" role="switch" id="flexSwitchCheckDefault1">
+                        {% endif %}
+                        <label class="form-check-label" for="flexSwitchCheckDefault1">Garder des plantes?</label>
+                    </div>
+                    </br>
+                    <div class="form-switch">
+                        {% if IsBotanist == true %}
+                            <input class="form-check-input" name="setIsBotanist" type="checkbox" role="switch" id="flexSwitchCheckDefault2" checked>
+                        {% else %}
+                            <input class="form-check-input" name="setIsBotanist" type="checkbox" role="switch" id="flexSwitchCheckDefault2">
+                        {% endif %}
+
+                        <label class="form-check-label" for="flexSwitchCheckDefault2">Botaniste? [non permis]</label>
+                    </div>
+                    </br>
+                    <br>
+                    <button type="submit" class="btn btn-secondary" style="background-color:#f5f7f2; color:black; width: 100%;">Appliquer les options</button>
+                </form>
+            </div>
+
+            <div class="mb-3">
+                <br>
+                <h1>...</h1>
+                <br>
+            </div>
+
+            <div>
+                <form action="{{ path('app_moncompte_suppr') }}" method="post" onsubmit="return confirm('CECI VA DETRUIRE VOTRE COMPTE DÉFINITIVEMENT. Etes-vous bien sûr de vouloir supprimer votre compte définitivement?')">
+                    <button type="submit" class="btn btn-danger">SUPPRIMER MON COMPTE</button>
+                </form>
+                
+            </div>
+            <br>
+            <br>
+
+        </div>
     </div>
 
 
@@ -31,5 +153,22 @@
 
 
     <script>
+
+        // Mdp verif
+        function MdpVerif() {
+            el1=document.getElementById("InputNewPassword");
+            el2=document.getElementById("InputNewPasswordVerif");
+
+            if(el1.value !=null || el2.value !=null ){
+                if(el1.value==el2.value){
+                    document.getElementById("formverif").submit();
+                }
+                else{
+                    alert("Les mdp sont different!");
+                }
+            }
+
+        }
+
     </script>
 {% endblock %}

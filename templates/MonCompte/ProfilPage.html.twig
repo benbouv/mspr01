@@ -1,0 +1,139 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ userprofilselcted.pseudo }} {% endblock %}
+
+{% block head %}
+    <style>
+
+      @media screen and (max-height: 450px) {
+      }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+
+
+    {# Corps #}
+
+    <div style="text-align:center;">
+        <div style="border-bottom: 1px solid #222222aa;">
+            <div style="margin:1em; ">
+                <h1>Profil disponible : {{userprofilselcted.pseudo}}</h1>
+            </div>
+        </div>
+
+
+        {# Les informations personnelles #}
+
+        <div style="margin:2em; color: #c8e4af; font-weight: bold;">
+            <h1 class="display-5">Les informations du profil</h1>
+        </div>
+
+        <div style="display: inline-block;">
+            <div style="display:flex; width:30em;">
+                <div style="flex:0.7;">
+                    <div style="justify-content:center; margin-left:2em;">
+
+                        <form id="formverif" action="{{ path('app_moncompte_traitement') }}" method="post">
+                            {% if userprofilselcted.pseudo != null %}
+                                <div class="mb-3">
+                                    <label class="form-control" aria-describedby="emailHelp"> {{ userprofilselcted.pseudo }} </label>
+                                </div>
+                            {% else %}
+                                <div class="mb-3">
+                                    <label class="form-control" aria-describedby="emailHelp" style="color:red;"> Pas de pseudo indiqué </label>
+                                </div>
+                            {% endif %}
+                            {% if userprofilselcted.nom != null %}
+                                <div class="mb-3">
+                                    <label class="form-control" aria-describedby="emailHelp"> {{ userprofilselcted.nom }} </label>
+                                </div>
+                            {% else %}
+                                <div class="mb-3">
+                                    <label class="form-control" aria-describedby="emailHelp" style="color:red;"> Pas de nom indiqué </label>
+                                </div>
+                            {% endif %}
+                            {% if userprofilselcted.email != null %}
+                                <div class="mb-3">
+                                    <label class="form-control" aria-describedby="emailHelp"> {{ userprofilselcted.email }} </label>
+                                </div>
+                            {% else %}
+                                <div class="mb-3">
+                                    <label class="form-control" aria-describedby="emailHelp" style="color:red;"> Pas d'email indiqué </label>
+                                </div>
+                            {% endif %}
+                            {% if userprofilselcted.telephone != null %}
+                                <div class="mb-3">
+                                    <label class="form-control" aria-describedby="emailHelp"> {{ userprofilselcted.telephone }} </label>
+                                </div>
+                            {% else %}
+                                <div class="mb-3">
+                                    <label class="form-control" aria-describedby="emailHelp" style="color:red;"> Pas de n° de telephone indiqué</label>
+                                </div>
+                            {% endif %}
+                        </form>
+                    </div>
+                    <br>
+                </div>
+                <div style="flex:0.3; display:flex; flex-direction: column;">
+                    <div style="margin-left:1em">
+                        <img src="{{ asset('build/img/profil-vide.png') }}" alt="..." height="200px" width="200px">
+                        <p>{{ userprofilselcted.pseudo }}</p>
+                        <small>Note :</small><p>✩✩</p>  
+                    </div>
+                    <div style="margin-left:3em; text-align:left;">
+                        <small>Nombre de gardes : x</small>
+                        <small>Nombre de demandes : x</small>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+
+        {# Les Options #}
+
+        <div style=" margin-bottom:2em; margin-top:1em; color: #c8e4af; font-weight: bold;">
+            <h1 class="display-5">Votre plante à garder</h1>
+        </div>
+        <div style=" display:flex;  flex-direction: column; justify-content:center; margin:2em;">
+
+        
+            <div style=" display:flex; flex-direction: column; justify-content:center; margin:auto;">
+                {% for plante in mesplantes %}                
+                    <div class="card mb-3" style="">
+                        <div style="display:flex;">
+                            <div style="flex:30%;">
+                                {% if plante.image == null %}
+                                    <img src="{{ asset('build/img/logo-cycloop.png') }}" class="img-fluid rounded-start" height="100px" style="height:100px;" alt="...">
+                                {% else %}
+                                    <img src="{{ asset('uploads/' ~ plante.image) }}" class="img-fluid rounded-start" height="100px" style="height:100px;" alt="...">  
+                                {% endif %}
+                            </div>
+                            <div style="flex:60%;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ plante.Nom }}</h5>
+                                    <p class="card-text">{{plante.PeriodeArrosage}}</p>
+                                    <p class="card-text"><small class="text-muted">Last updated x mins ago</small></p>
+                                </div>
+
+                            </div>
+                        </div>
+                        <form action="{{ path('app_profilpagetraitement', {id: userprofilselcted.Id, plante_id: plante.Id}) }}">
+                            <button type="submit" class="btn btn-success" style="margin:auto; margin-bottom:2em; margin-top:2em; max-width:300px;">Proposer cette plante</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+    <script>
+    </script>
+{% endblock %}

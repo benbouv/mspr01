@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Plante;
 use App\Form\PlanteEntrerType;
+use App\Repository\DemandeRepository;
 use App\Repository\PhotoRepository;
 use App\Repository\MessageRepository;
 use App\Repository\PlanteRepository;
@@ -20,6 +21,7 @@ class MesPlantesController extends AbstractController
     private $repository;
     private $repository_photo;
     private $repository_messages;
+    private $repository_demandes;
     private $em;
     private $security;
 
@@ -27,12 +29,14 @@ class MesPlantesController extends AbstractController
         EntityManagerInterface $em, 
         Security $security,
         MessageRepository $messageRepository,
+        DemandeRepository $demandeRepository,
         PhotoRepository $photoRepository
         )
     {
         $this->repository = $planteRepository;
         $this->repository_photo = $photoRepository;
         $this->repository_messages = $messageRepository;
+        $this->repository_demandes = $demandeRepository;
         $this->em = $em;
         $this->security = $security;
     }
@@ -48,11 +52,13 @@ class MesPlantesController extends AbstractController
         if(!empty($user))
         {
             $userId = $user->getId();
-            $plantes = $this->repository->findByUserId($userId);
-            $plantes = array_reverse($plantes);
+            $plantes = array_reverse( $this->repository->findByUserId($userId));
+            $plantesGardees = array_reverse($this->repository->findByUserGardId($userId));
+
             return $this->render('MesPlantes/MesPlantes.html.twig', [
                 'controller_name' => 'MesPlantesController',
-                'mesplantes' => $plantes
+                'mesplantes' => $plantes,
+                'plantesGardees' => $plantesGardees
             ]);
         }
         return $this->redirectToRoute('app_register');
@@ -91,6 +97,13 @@ class MesPlantesController extends AbstractController
             $user = $this->security->getUser();
             if($plante->getUserOwningPlant()===$user)
             {
+                //supresion des demandes
+                $demandes = $this->repository_demandes->findByPlanteId($plante->getId());
+                foreach($demandes as $demande)
+                {
+                    $this->repository_demandes->remove($demande,true);
+                }
+
                 //supression de l'image
                 $fichier_directory = $this->getParameter('images_directory');
                 if (is_file($fichier_directory . '/' . $plante->getImage()) && $plante->getImage() !== null)

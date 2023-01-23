@@ -53,9 +53,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'userAdviseMessage', targetEntity: Message::class)]
     private Collection $messagesAdvised;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Pseudo = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Nom = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $telephone = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $lat = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $lng = null;
+
     public function __construct()
     {
-        $this->notes = new ArrayCollection();
+        $this->notesGiven = new ArrayCollection();
         $this->notesReceived = new ArrayCollection();
         $this->plantesOwned = new ArrayCollection();
         $this->plantesKept = new ArrayCollection();
@@ -340,6 +355,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $messagesAdvised->setUserAdviseMessage(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->Pseudo;
+    }
+
+    public function setPseudo(?string $Pseudo): self
+    {
+        $this->Pseudo = $Pseudo;
+
+        return $this;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->Nom;
+    }
+
+    public function setNom(?string $Nom): self
+    {
+        $this->Nom = $Nom;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(?string $telephone): self
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getLat(): ?float
+    {
+        return $this->lat;
+    }
+
+    public function setLat(?float $lat): self
+    {
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    public function getLng(): ?float
+    {
+        return $this->lng;
+    }
+
+    public function setLng(?float $lng): self
+    {
+        $this->lng = $lng;
 
         return $this;
     }

@@ -56,6 +56,26 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->save($user, true);
     }
 
+
+
+
+
+    public function findAllBydistance($geolat,$geolng)
+    {
+        return $this->createQueryBuilder('p')
+            ->setParameters([
+                'val_lat' => $geolat,
+                'val_lng' => $geolng
+                ])
+           ->select('*, (6371 * ACOS(COS(RADIANS(p.lat)) * COS(RADIANS(val_lat)) * COS(RADIANS($geolng) - RADIANS(".$geolng.")) + SIN(RADIANS(p.lat)) * SIN(RADIANS(val_lat)))) AS distance FROM user HAVING distance < 70')
+           ->orderBy('distance')
+           ->getQuery()
+           ->getResult()
+        ;
+    }
+
+
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
