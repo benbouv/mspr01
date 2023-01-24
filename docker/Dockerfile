@@ -20,6 +20,7 @@ RUN npm run build
 
 RUN chown -R www-data:www-data "/var/www/var/log"
 RUN chown -R www-data:www-data "/var/www/var/cache"
+RUN chown -R www-data:www-data "/var/www/public/uploads"
 
 WORKDIR /var/www/
 
