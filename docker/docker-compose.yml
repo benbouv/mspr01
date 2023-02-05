@@ -2,7 +2,7 @@ version: '3'
 
 services:
 ###> doctrine/doctrine-bundle ###
-  database:
+  mysql:
     container_name: mysql
     image: mysql
     restart: always
@@ -19,7 +19,7 @@ services:
     ports:
       - 91:80
     environment:
-      - PMA_HOST=database
+      - PMA_HOST=mysql
 
   app:
     container_name: phpsymfony
@@ -29,4 +29,4 @@ services:
     environment:
       DATABASE_URL: mysql://root:root@mysql:3306/arosaje
     links:
-      - database
+      - mysql
