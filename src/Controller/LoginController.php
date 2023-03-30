@@ -32,4 +32,19 @@ class LoginController extends AbstractController
         // controller can be blank: it will never be called
         throw new \Exception('Don\'t forget to activate logout in security.yaml');
     }
+
+
+
+    #[Route(path: '/login/jsonLogin', name: 'app_jsonLogin', methods: ['POST'])]
+    public function jsonLogin()
+    {
+        $user = $this->getUser();
+        return $this->json([
+            'username' => $user->getUserIdentifier(),
+            'roles' => $user->getRoles()
+        ]);
+
+    }
+
+
 }

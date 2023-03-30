@@ -28,13 +28,19 @@ security:
                 login_path: app_login
                 check_path: app_login
 
+            json_login:
+                check_path: app_jsonLogin
+
+
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/botanist, roles: ROLE_BOTANIST }
         - { path: ^/user, roles: ROLE_USER }
 
     role_hierarchy:
+        ROLE_ADMIN: ['ROLE_USER', 'ROLE_BOTANIST']
         ROLE_BOTANIST: ROLE_USER
         ROLE_GARDIEN: ROLE_USER
 

@@ -2,12 +2,26 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\PlanteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+        operations: [
+            new Get(normalizationContext: ['groups' => 'plante:item']),
+            //new GetCollection(normalizationContext: ['groups' => 'plante:list']), //GET ALL PLANTES
+            //new Post(normalizationContext: ['groups' => 'plante:item']),
+        ],
+        order: ['famille' => 'DESC', 'nom' => 'ASC'],
+        paginationEnabled: false,
+    )]
 #[ORM\Entity(repositoryClass: PlanteRepository::class)]
 class Plante
 {
@@ -28,12 +42,15 @@ class Plante
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['plante:list', 'plante:item'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $nom = null;
 
+    #[Groups(['plante:list', 'plante:item'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $periodeArrosage = null;
 
+    #[Groups(['plante:list', 'plante:item'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $famille = null;
 
