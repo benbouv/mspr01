@@ -14,6 +14,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class MesPlantesController extends AbstractController
 {
@@ -30,7 +31,8 @@ class MesPlantesController extends AbstractController
         Security $security,
         MessageRepository $messageRepository,
         DemandeRepository $demandeRepository,
-        PhotoRepository $photoRepository
+        PhotoRepository $photoRepository,
+        private SerializerInterface $serializer,
         )
     {
         $this->repository = $planteRepository;
@@ -39,6 +41,7 @@ class MesPlantesController extends AbstractController
         $this->repository_demandes = $demandeRepository;
         $this->em = $em;
         $this->security = $security;
+        $this->serializer = $serializer;
     }
 
 
@@ -207,4 +210,43 @@ class MesPlantesController extends AbstractController
         return $this->redirectToRoute('app_mesplantes');
     
     }
+
+
+
+
+    // API \\
+
+        // GET \\
+
+        #[Route('/user/mesplantesapi', name: 'app_mesplantesapi', methods: ['GET'])]
+        public function indexapi(): Response
+        {
+            /** @var User $user */
+            $user = $this->security->getUser();
+            if(!empty($user))
+            {
+                $userId = $user->getId();
+                //$plantes = $this->repository->findAll();
+                $plantes = array_reverse( $this->repository->findByUserId($userId));
+                //$plantesGardees = array_reverse($this->repository->findByUserGardId($userId));
+
+                $json = $this->serializer->serialize($plantes, "json");
+
+                return new Response($json, 200, ["Content-Type" => "application/json"]);
+
+            }
+
+            return $this->json([
+                'message' => 'DIE',
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
+
+
+
+
+
+
+
+
 }

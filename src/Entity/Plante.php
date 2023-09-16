@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
+        
         operations: [
             new Get(normalizationContext: ['groups' => 'plante:item']),
             //new GetCollection(normalizationContext: ['groups' => 'plante:list']), //GET ALL PLANTES

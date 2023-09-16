@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,5 +49,30 @@ class RegistrationController extends AbstractController
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+    }
+
+    #[Route('/registerJson', name: 'app_registerJson')]
+    public function registerJson(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface, UserRepository $userRepository): Response
+    {
+        $userNew = new User;
+        $rep = $request->getContent();          
+        $data = json_decode($rep, true);
+        $userNew->setEmail($data["username"]);
+        $userNew->setPassword(
+            $userPasswordHasherInterface->hashPassword(
+                $userNew,
+                md5( uniqid("mdp"))
+            ));
+
+        $userRepository->save($userNew,true);
+
+        return $this->json([
+            'token' => "FING&GGHYJ&759",
+            'message' => 'User added',
+            'username' => $userNew->getUserIdentifier(),
+            'roles' => $userNew->getRoles()
+        ]);
+
+
     }
 }

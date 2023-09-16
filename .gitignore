@@ -34,3 +34,7 @@ symfony.lock
 assets/controllers.json
 composer.lock
 symfony.lock
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

@@ -1,4 +1,6 @@
 security:
+    enable_authenticator_manager: true
+
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
@@ -9,10 +11,31 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+        # jwt:
+        #     lexik_jwt: ~
+
     firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+        # login:
+    #         pattern: ^/api/login
+    #         stateless: true
+    #         provider: app_user_provider
+    #         json_login:
+    #             check_path: /api/login
+    #             success_handler: lexik_jwt_authentication.handler.authentication_success
+    #             failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        # api:
+        #     pattern:   ^/api/
+        #     stateless: true
+        #     provider: jwt
+        #     jwt: ~
+            #anonymous: true
+
+
+        # dev:
+        #     pattern: ^/(_(profiler|wdt)|css|images|js)/
+        #     security: false
+
         main:
             lazy: true
             provider: app_user_provider
@@ -27,9 +50,10 @@ security:
                 # "app_login" is the name of the route created previously
                 login_path: app_login
                 check_path: app_login
+            #   json_login:
+            #       check_path: app_jsonLogin
 
-            json_login:
-                check_path: app_jsonLogin
+
 
 
     # Easy way to control access for large sections of your site
@@ -38,6 +62,8 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/botanist, roles: ROLE_BOTANIST }
         - { path: ^/user, roles: ROLE_USER }
+        - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
 
     role_hierarchy:
         ROLE_ADMIN: ['ROLE_USER', 'ROLE_BOTANIST']
